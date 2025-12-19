@@ -1,0 +1,236 @@
+/* ===== Auth Pages ===== */
+.auth-container {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.auth-card {
+    padding: var(--space-2xl);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.auth-icon {
+    font-size: 3em;
+    color: var(--primary-color);
+    margin-bottom: var(--space-lg);
+}
+
+.auth-title {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-sm);
+}
+
+.auth-subtitle {
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+}
+
+.auth-form .form-group {
+    margin-bottom: var(--space-lg);
+}
+
+.auth-actions {
+    margin-top: var(--space-xl);
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: var(--space-xl) 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.auth-divider-text {
+    padding: 0 var(--space-md);
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border-color);
+}
+
+.auth-footer a {
+    font-weight: 500;
+}
+
+/* ===== Social Auth ===== */
+.social-auth {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.social-btn:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+.social-btn.google {
+    color: #ea4335;
+}
+
+.social-btn.facebook {
+    color: #1877f2;
+}
+
+.social-btn-icon {
+    font-size: 1.2em;
+}
+
+/* ===== Forgot Password ===== */
+.forgot-password {
+    text-align: right;
+    margin-top: calc(var(--space-sm) * -1);
+    margin-bottom: var(--space-lg);
+}
+
+.forgot-password a {
+    font-size: var(--font-size-sm);
+    color: var(--primary-color);
+}
+
+/* ===== Terms & Conditions ===== */
+.terms-container {
+    max-height: 200px;
+    overflow-y: auto;
+    padding: var(--space-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-lg);
+    background-color: #f9fafb;
+}
+
+.terms-content {
+    font-size: var(--font-size-sm);
+    color: var(--text-light);
+    line-height: 1.5;
+}
+
+/* ===== Progress Steps ===== */
+.auth-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-xl);
+    position: relative;
+}
+
+.auth-steps::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--border-color);
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.auth-step {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all var(--transition-base);
+}
+
+.step-circle.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.step-circle.completed {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+    color: white;
+}
+
+.step-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.step-label.active {
+    color: var(--primary-color);
+}
+
+/* ===== Responsive Auth ===== */
+@media (max-width: 768px) {
+    .auth-card {
+        padding: var(--space-xl);
+    }
+
+    .auth-icon {
+        font-size: 2.5em;
+    }
+
+    .social-btn {
+        padding: var(--space-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: var(--space-lg);
+    }
+
+    .auth-steps {
+        gap: var(--space-sm);
+    }
+
+    .step-circle {
+        width: 32px;
+        height: 32px;
+        font-size: var(--font-size-sm);
+    }
+
+    .step-label {
+        font-size: var(--font-size-xs);
+    }
+}

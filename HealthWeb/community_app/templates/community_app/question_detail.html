@@ -1,0 +1,113 @@
+{% extends 'community_app/base.html' %}
+
+
+{% block title %}{{ question.title }} - HealthConnect{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Question -->
+    <div class="card mb-6">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h1 class="text-2xl font-bold mb-2">{{ question.title }}</h1>
+                <div class="flex items-center gap-4 text-sm text-muted mb-4">
+                    <span>
+                        <i class="fas fa-user"></i> {{ question.user.username }}
+                    </span>
+                    <span>
+                        <i class="fas fa-calendar"></i> {{ question.created_at|date:"M d, Y" }}
+                    </span>
+                    {% if question.category %}
+                        <span class="badge badge-primary">{{ question.category.name }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="text-center">
+                <form method="POST" action="{% url 'upvote_question' question.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="flex flex-col items-center">
+                        <i class="fas fa-thumbs-up text-xl {% if user in question.upvotes.all %}text-primary{% endif %}"></i>
+                        <span class="text-sm">{{ question.total_upvotes }}</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="prose max-w-none mb-6">
+            {{ question.description|linebreaks }}
+        </div>
+    </div>
+
+    <!-- Answers Section -->
+    <div class="card">
+        <h2 class="mb-4">{{ answers.count }} Answers</h2>
+
+        {% if user.is_authenticated %}
+            <button onclick="toggleAnswerForm()" class="btn btn-primary mb-4">
+                <i class="fas fa-plus"></i> Add Answer
+            </button>
+
+            <form id="answer-form" method="POST" style="display: none;" class="mb-6">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.text }}
+                </div>
+                <button type="submit" class="btn btn-secondary">Submit Answer</button>
+            </form>
+        {% else %}
+            <p class="text-muted mb-4">
+                <a href="{% url 'login' %}">Login</a> to post an answer.
+            </p>
+        {% endif %}
+
+        <!-- Answers List -->
+        {% for answer in answers %}
+            <div class="border-t pt-4 mt-4 first:border-t-0 first:pt-0">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="flex items-center gap-3">
+                        <div>
+                            <span class="font-medium">{{ answer.user.username }}</span>
+                            <span class="text-sm text-muted">
+                                on {{ answer.created_at|date:"M d, Y" }}
+                            </span>
+                            {% if answer.is_expert %}
+                                <span class="badge badge-secondary ml-2">Expert</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <form method="POST" action="{% url 'upvote_answer' answer.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="flex flex-col items-center">
+                                <i class="fas fa-thumbs-up {% if user in answer.upvotes.all %}text-primary{% endif %}"></i>
+                                <span class="text-sm">{{ answer.total_upvotes }}</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="prose max-w-none">
+                    {{ answer.text|linebreaks }}
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center text-muted py-4">No answers yet. Be the first to respond!</p>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function toggleAnswerForm() {
+        const form = document.getElementById('answer-form');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            window.scrollTo({
+                top: form.offsetTop - 100,
+                behavior: 'smooth'
+            });
+        } else {
+            form.style.display = 'none';
+        }
+    }
+</script>
+{% endblock %}

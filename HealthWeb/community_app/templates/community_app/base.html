@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthConnect - {% block title %}Community Health Platform{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/main.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="{% url 'home' %}" class="logo">
+                    <i class="fas fa-heartbeat"></i> HealthConnect
+                </a>
+                <div class="nav-links">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'ask_question' %}" class="nav-link">
+                            <i class="fas fa-question-circle"></i> Ask Question
+                        </a>
+                        <a href="{% url 'add_journey' %}" class="nav-link">
+                            <i class="fas fa-history"></i> Add Journey
+                        </a>
+                        <a href="{% url 'profile' %}" class="nav-link">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="{% url 'logout' %}" class="btn btn-primary btn-small">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="nav-link">Login</a>
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-small">Sign Up</a>
+                    {% endif %}
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            {% if messages %}
+                <div class="messages-container">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            <span class="alert-icon">
+                                {% if message.tags == 'success' %}
+                                    <i class="fas fa-check-circle"></i>
+                                {% elif message.tags == 'error' %}
+                                    <i class="fas fa-exclamation-circle"></i>
+                                {% else %}
+                                    <i class="fas fa-info-circle"></i>
+                                {% endif %}
+                            </span>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>&copy; 2024 HealthConnect. All rights reserved.</p>
+                    <p class="footer-subtitle">A community for health advice and support</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
