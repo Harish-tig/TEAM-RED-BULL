@@ -12,5 +12,6 @@ urlpatterns = [
     path('terms-and-conditions/', views.terms_and_conditions, name='terms'),
     path('sitemap/', views.sitemap, name='sitemap'),
     path('redirect_login/',views.redirect_login,name="redirect_login"),
+    path("redirect_register/",views.redirect_register, name = "redirect_register"),
     path('find-doctor/', views.find_doctor, name='find_doctor'),
 ]

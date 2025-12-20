@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import ContactForm
 from .models import ContactSubmission
-from community_app.views import login_view, home as h2
+from community_app.views import login_view, home as h2, register
 import random
 from datetime import datetime, timedelta
 
@@ -61,6 +61,9 @@ def redirect_login(request):
     if request.user.is_authenticated:
         return h2(request)
     return login_view(request=request)
+
+def redirect_register(request):
+    return register(request=request)
 
 def find_doctor(request):
     # Generate fake doctor data
