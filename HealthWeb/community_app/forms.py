@@ -45,3 +45,34 @@ class JourneyForm(forms.ModelForm):
             'symptom': forms.Textarea(attrs={'rows': 3}),
             'notes': forms.Textarea(attrs={'rows': 3}),
         }
+
+
+from django import forms
+from .models import Question, Answer, Journey, UserProfile, Category
+
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['title', 'description', 'category']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Be specific about your health concern'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control form-textarea',
+                'placeholder': 'Include details like: symptoms, duration, what you\'ve tried, doctor visits...',
+                'rows': 6
+            }),
+            'category': forms.Select(attrs={
+                'class': 'form-control form-select'
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make fields required
+        self.fields['title'].required = True
+        self.fields['description'].required = True
+        self.fields['category'].required = False

@@ -1,39 +1,517 @@
 {% extends 'community_app/base.html' %}
-
+{% load static %}
 
 {% block title %}Login - HealthConnect{% endblock %}
 
-{% block content %}
-<div class="max-w-md mx-auto">
-    <div class="card">
-        <h1 class="text-2xl font-bold mb-6 text-center">Login to HealthConnect</h1>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
 
-        <form method="POST">
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-icon">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <h1 class="auth-title">Login to HealthConnect</h1>
+            <p class="auth-subtitle">Welcome back to your health community</p>
+        </div>
+
+        <form method="POST" class="auth-form" data-validate>
             {% csrf_token %}
 
-            <div class="form-group mb-4">
-                <label for="username">Username</label>
+            {% if messages %}
+                <div class="messages-container">
+                    {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                            <div class="alert alert-error">
+                                <i class="fas fa-exclamation-circle"></i> {{ message }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="username" class="form-label required">Username</label>
                 <input type="text" name="username" id="username"
-                       class="form-control" required>
+                       class="form-control"
+                       placeholder="Enter your username"
+                       required>
             </div>
 
-            <div class="form-group mb-6">
-                <label for="password">Password</label>
+            <div class="form-group">
+                <label for="password" class="form-label required">Password</label>
                 <input type="password" name="password" id="password"
-                       class="form-control" required>
+                       class="form-control"
+                       placeholder="Enter your password"
+                       required>
+                <div class="forgot-password">
+                    <a href="#" class="forgot-password-link">Forgot password?</a>
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary w-full mb-4">
-                <i class="fas fa-sign-in-alt"></i> Login
-            </button>
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" name="remember" id="remember" class="form-check-input">
+                    <label for="remember" class="form-check-label">Remember me</label>
+                </div>
+            </div>
 
-            <div class="text-center">
-                <p class="text-muted">
-                    Don't have an account?
-                    <a href="{% url 'register' %}" class="text-primary">Sign up</a>
-                </p>
+            <div class="auth-actions">
+                <button type="submit" class="btn btn-primary btn-large btn-full">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
             </div>
         </form>
+
+
+        <div class="auth-footer">
+            <p class="auth-footer-text">
+                Don't have an account?
+                <a href="{% url 'register' %}" class="auth-footer-link">Sign up</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="benefits-card">
+        <h3 class="benefits-title">Benefits of logging in:</h3>
+        <div class="benefits-list">
+            <div class="benefit-item">
+                <i class="fas fa-question-circle benefit-icon"></i>
+                <div class="benefit-content">
+                    <h4 class="benefit-heading">Ask Questions</h4>
+                    <p class="benefit-description">Get advice from the community</p>
+                </div>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-comments benefit-icon"></i>
+                <div class="benefit-content">
+                    <h4 class="benefit-heading">Share Answers</h4>
+                    <p class="benefit-description">Help others with your experiences</p>
+                </div>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-history benefit-icon"></i>
+                <div class="benefit-content">
+                    <h4 class="benefit-heading">Track Your Journey</h4>
+                    <p class="benefit-description">Document your health progress</p>
+                </div>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-bell benefit-icon"></i>
+                <div class="benefit-content">
+                    <h4 class="benefit-heading">Get Notified</h4>
+                    <p class="benefit-description">Stay updated on responses</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+    /* Auth Container */
+    .auth-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Auth Card */
+    .auth-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-bottom: 20px;
+    }
+
+    /* Auth Header */
+    .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .auth-icon {
+        font-size: 48px;
+        color: #3498db;
+        margin-bottom: 15px;
+    }
+
+    .auth-title {
+        font-size: 28px;
+        color: #2c3e50;
+        margin: 0 0 10px 0;
+    }
+
+    .auth-subtitle {
+        color: #7f8c8d;
+        font-size: 16px;
+        margin: 0;
+    }
+
+    /* Form Styles */
+    .auth-form {
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #2c3e50;
+        font-weight: 500;
+    }
+
+    .form-label.required::after {
+        content: " *";
+        color: #e74c3c;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    .form-control.error {
+        border-color: #e74c3c;
+    }
+
+    /* Forgot Password */
+    .forgot-password {
+        text-align: right;
+        margin-top: 8px;
+    }
+
+    .forgot-password-link {
+        color: #3498db;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .forgot-password-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Remember Me */
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-check-input {
+        width: 18px;
+        height: 18px;
+    }
+
+    .form-check-label {
+        color: #2c3e50;
+        font-size: 14px;
+    }
+
+    /* Button */
+    .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+
+    .btn-large {
+        padding: 14px 28px;
+        font-size: 16px;
+    }
+
+    .btn-full {
+        width: 100%;
+        display: block;
+    }
+
+    .auth-actions {
+        margin-top: 30px;
+    }
+
+    /* Divider */
+    .auth-divider {
+        display: flex;
+        align-items: center;
+        margin: 25px 0;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background-color: #ddd;
+    }
+
+    .auth-divider-text {
+        padding: 0 15px;
+        color: #7f8c8d;
+        font-size: 14px;
+    }
+
+    /* Auth Footer */
+    .auth-footer {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+
+    .auth-footer-text {
+        color: #7f8c8d;
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .auth-footer-link {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 500;
+        margin-left: 5px;
+    }
+
+    .auth-footer-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Benefits Card */
+    .benefits-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
+
+    .benefits-title {
+        font-size: 22px;
+        color: #2c3e50;
+        margin: 0 0 20px 0;
+    }
+
+    .benefits-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .benefit-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px;
+        background-color: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e0e6ed;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .benefit-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .benefit-icon {
+        font-size: 24px;
+        color: #3498db;
+        margin-top: 3px;
+        flex-shrink: 0;
+    }
+
+    .benefit-content {
+        flex: 1;
+    }
+
+    .benefit-heading {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 0 5px 0;
+        color: #2c3e50;
+    }
+
+    .benefit-description {
+        font-size: 14px;
+        color: #7f8c8d;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    /* Messages and Alerts */
+    .messages-container {
+        margin-bottom: 20px;
+    }
+
+    .alert {
+        padding: 12px 15px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .alert-error {
+        background-color: #fee;
+        border: 1px solid #fcc;
+        color: #c33;
+    }
+
+    .form-error {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .auth-container {
+            padding: 10px;
+        }
+
+        .auth-card,
+        .benefits-card {
+            padding: 20px;
+        }
+
+        .auth-title {
+            font-size: 24px;
+        }
+
+        .benefit-item {
+            padding: 12px;
+        }
+
+        .benefit-icon {
+            font-size: 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .auth-title {
+            font-size: 22px;
+        }
+
+        .auth-icon {
+            font-size: 40px;
+        }
+
+        .form-control {
+            padding: 10px 12px;
+        }
+
+        .btn-large {
+            padding: 12px 24px;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add form validation
+        const form = document.querySelector('.auth-form');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+
+                // Validate username
+                if (!usernameInput.value.trim()) {
+                    showError(usernameInput, 'Username is required');
+                    isValid = false;
+                } else {
+                    clearError(usernameInput);
+                }
+
+                // Validate password
+                if (!passwordInput.value.trim()) {
+                    showError(passwordInput, 'Password is required');
+                    isValid = false;
+                } else if (passwordInput.value.length < 6) {
+                    showError(passwordInput, 'Password must be at least 6 characters');
+                    isValid = false;
+                } else {
+                    clearError(passwordInput);
+                }
+
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+        }
+
+        // Clear errors on input
+        usernameInput.addEventListener('input', function() {
+            clearError(this);
+        });
+
+        passwordInput.addEventListener('input', function() {
+            clearError(this);
+        });
+
+        function showError(input, message) {
+            clearError(input);
+
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'form-error';
+            errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+
+            input.parentNode.appendChild(errorDiv);
+            input.classList.add('error');
+        }
+
+        function clearError(input) {
+            const errorDiv = input.parentNode.querySelector('.form-error');
+            if (errorDiv) {
+                errorDiv.remove();
+            }
+            input.classList.remove('error');
+        }
+
+        // Forgot password
+        const forgotPasswordLink = document.querySelector('.forgot-password-link');
+        if (forgotPasswordLink) {
+            forgotPasswordLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                alert('Password reset functionality would go here. This is a demo.');
+            });
+        }
+    });
+</script>
 {% endblock %}

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medical Aids in South Africa - Health Assistant</title>
+    <style>
+      /* Chatbot Styles */
+      #chatbot-icon {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #0a2f44, #ff5b5b);
+        color: white;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 4px 20px rgba(10, 47, 68, 0.3);
+        transition: all 0.3s ease;
+        animation: pulse 2s infinite;
+      }
+
+      #chatbot-icon:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 25px rgba(10, 47, 68, 0.4);
+      }
+
+      #chatbot-icon.active {
+        background: linear-gradient(135deg, #ff5b5b, #0a2f44);
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(255, 91, 91, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(255, 91, 91, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(255, 91, 91, 0);
+        }
+      }
+
+      #chatbot-window {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 380px;
+        height: 500px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid #e0e0e0;
+      }
+
+      .chat-header {
+        background: linear-gradient(135deg, #0a2f44, #06304a);
+        color: white;
+        padding: 18px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background 0.3s ease;
+      }
+
+      .close-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .chat-body {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        background: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .message {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        font-size: 14px;
+        line-height: 1.5;
+        word-wrap: break-word;
+      }
+
+      .user-message {
+        align-self: flex-end;
+        background: #0a2f44;
+        color: white;
+        border-bottom-right-radius: 4px;
+      }
+
+      .bot-message {
+        align-self: flex-start;
+        background: white;
+        color: #333;
+        border: 1px solid #e0e0e0;
+        border-bottom-left-radius: 4px;
+      }
+
+      .typing-indicator {
+        align-self: flex-start;
+        background: white;
+        padding: 12px 16px;
+        border-radius: 18px;
+        border: 1px solid #e0e0e0;
+        display: none;
+      }
+
+      .typing-indicator span {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #0a2f44;
+        border-radius: 50%;
+        margin: 0 2px;
+        animation: typing 1.4s infinite;
+      }
+
+      .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes typing {
+        0%,
+        60%,
+        100% {
+          transform: translateY(0);
+        }
+        30% {
+          transform: translateY(-5px);
+        }
+      }
+
+      .chat-input-container {
+        padding: 15px;
+        background: white;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        gap: 10px;
+      }
+
+      #chat-input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 24px;
+        font-size: 14px;
+        outline: none;
+        transition: border 0.3s ease;
+      }
+
+      #chat-input:focus {
+        border-color: #0a2f44;
+      }
+
+      #send-btn {
+        background: #0a2f44;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease;
+      }
+
+      #send-btn:hover {
+        background: #06304a;
+      }
+
+      .welcome-message {
+        text-align: center;
+        color: #666;
+        font-size: 12px;
+        margin-top: 10px;
+      }
+
+      .disclaimer {
+        font-size: 11px;
+        color: #999;
+        margin-top: 5px;
+        line-height: 1.4;
+      }
+
+      .suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .suggestion-btn {
+        background: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 16px;
+        padding: 6px 12px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .suggestion-btn:hover {
+        background: #e0e0e0;
+      }
+
+      /* Responsive */
+      @media (max-width: 480px) {
+        #chatbot-window {
+          width: calc(100% - 40px);
+          right: 20px;
+          bottom: 90px;
+          height: 450px;
+        }
+
+        #chatbot-icon {
+          bottom: 20px;
+          right: 20px;
+          width: 56px;
+          height: 56px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Add this at the end of your body, right before closing </body> tag -->
+    <div id="chatbot-icon" onclick="toggleChat()">💬</div>
+
+    <div id="chatbot-window">
+      <div class="chat-header">
+        <span>Health Assistant 🤖</span>
+        <button class="close-btn" onclick="toggleChat()">×</button>
+      </div>
+
+      <div class="chat-body" id="chat-body">
+        <!-- Welcome message -->
+        <div class="bot-message message">
+          Hello! I'm your Health Assistant. I can help you with:
+          <br /><br />
+          • Medical aid plan information<br />
+          • Healthcare coverage questions<br />
+          • Medical terminology explanations<br />
+          • Health and wellness advice<br />
+          • Medical scheme comparisons
+          <br /><br />
+          <div class="welcome-message">
+            Note: This is an AI assistant. For medical emergencies, please
+            consult a healthcare professional immediately.
+          </div>
+          <div class="disclaimer">
+            Powered by DeepSeek AI. Not a substitute for professional medical
+            advice.
+          </div>
+
+          <!-- Quick suggestions -->
+          <div class="suggestions">
+            <button
+              class="suggestion-btn"
+              onclick="sendSuggestion('What is a medical aid waiting period?')"
+            >
+              Waiting periods
+            </button>
+            <button
+              class="suggestion-btn"
+              onclick="sendSuggestion('Compare medical aid plans')"
+            >
+              Compare plans
+            </button>
+            <button
+              class="suggestion-btn"
+              onclick="sendSuggestion('What does medical aid cover?')"
+            >
+              Coverage
+            </button>
+            <button
+              class="suggestion-btn"
+              onclick="sendSuggestion('How to choose medical aid?')"
+            >
+              Choosing aid
+            </button>
+          </div>
+        </div>
+
+        <!-- Typing indicator -->
+        <div class="typing-indicator" id="typing-indicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="chat-input-container">
+        <input
+          type="text"
+          id="chat-input"
+          placeholder="Ask about medical aid, healthcare, coverage..."
+          onkeypress="handleKeyPress(event)"
+        />
+        <button id="send-btn" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+
+    <script>
+      // Configuration - Replace with your DeepSeek API key
+      const DEEPSEEK_API_KEY = "YOUR_DEEPSEEK_API_KEY_HERE"; // Replace with your actual key
+      const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
+
+      // Healthcare context for the AI
+      const HEALTHCARE_CONTEXT = `You are a friendly and professional Health Assistant for Medical Aids in South Africa. 
+        You specialize in:
+        1. Medical aid/health insurance information
+        2. Healthcare coverage and benefits
+        3. Medical scheme comparisons
+        4. Health and wellness advice
+        5. Understanding medical terminology
+        
+        Important rules:
+        - Always stay within healthcare/medical domain
+        - If asked about non-health topics, politely redirect to health topics
+        - Never provide medical diagnosis or prescriptions
+        - Always recommend consulting healthcare professionals for medical advice
+        - Focus on South African medical schemes and regulations
+        - Be clear about what is vs isn't covered by medical aids
+        - Explain waiting periods, PMBs, and other medical aid concepts
+        
+        Format responses in a clear, helpful manner with bullet points when appropriate.`;
+
+      let chatHistory = [
+        {
+          role: "system",
+          content: HEALTHCARE_CONTEXT,
+        },
+      ];
+
+      function toggleChat() {
+        const chat = document.getElementById("chatbot-window");
+        const icon = document.getElementById("chatbot-icon");
+
+        if (chat.style.display === "flex") {
+          chat.style.display = "none";
+          icon.classList.remove("active");
+        } else {
+          chat.style.display = "flex";
+          icon.classList.add("active");
+          // Focus input when opening
+          setTimeout(() => {
+            document.getElementById("chat-input").focus();
+          }, 100);
+        }
+      }
+
+      function handleKeyPress(event) {
+        if (event.key === "Enter") {
+          sendMessage();
+        }
+      }
+
+      function sendSuggestion(text) {
+        document.getElementById("chat-input").value = text;
+        sendMessage();
+      }
+
+      function sendMessage() {
+        const input = document.getElementById("chat-input");
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        // Add user message to chat
+        addMessage(message, "user");
+        input.value = "";
+
+        // Show typing indicator
+        showTypingIndicator(true);
+
+        // Add to history
+        chatHistory.push({
+          role: "user",
+          content: message,
+        });
+
+        // Call DeepSeek API
+        fetchDeepSeekResponse();
+      }
+
+      async function fetchDeepSeekResponse() {
+        try {
+          const response = await fetch(DEEPSEEK_API_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${DEEPSEEK_API_KEY}`,
+            },
+            body: JSON.stringify({
+              model: "deepseek-chat",
+              messages: chatHistory,
+              max_tokens: 500,
+              temperature: 0.7,
+              stream: false,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(
+              `API request failed with status ${response.status}`
+            );
+          }
+
+          const data = await response.json();
+
+          // Hide typing indicator
+          showTypingIndicator(false);
+
+          // Get bot response
+          const botResponse = data.choices[0].message.content;
+
+          // Add bot message to chat
+          addMessage(botResponse, "bot");
+
+          // Add to history
+          chatHistory.push({
+            role: "assistant",
+            content: botResponse,
+          });
+
+          // Limit history to prevent token overflow
+          if (chatHistory.length > 20) {
+            // Keep system message and last 19 messages
+            chatHistory = [chatHistory[0], ...chatHistory.slice(-19)];
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          showTypingIndicator(false);
+
+          // Fallback response for common healthcare questions
+          const fallbackResponse = getFallbackResponse();
+          addMessage(fallbackResponse, "bot");
+
+          chatHistory.push({
+            role: "assistant",
+            content: fallbackResponse,
+          });
+        }
+      }
+
+      function getFallbackResponse() {
+        return (
+          "I'm currently experiencing technical difficulties. Here's some general information that might help:\n\n" +
+          "• **Medical aid waiting periods** are typically 3-12 months for new members\n" +
+          "• **PMBs (Prescribed Minimum Benefits)** are conditions all medical aids must cover\n" +
+          "• **Hospital plans** only cover in-hospital treatments\n" +
+          "• **Comprehensive plans** include day-to-day benefits\n\n" +
+          "Please try again in a moment or contact our support for immediate assistance."
+        );
+      }
+
+      function addMessage(text, sender) {
+        const chatBody = document.getElementById("chat-body");
+        const messageDiv = document.createElement("div");
+
+        messageDiv.className = `message ${sender}-message`;
+        messageDiv.textContent = text;
+
+        // Remove typing indicator if present
+        const typingIndicator = document.getElementById("typing-indicator");
+        if (typingIndicator.style.display === "block") {
+          chatBody.removeChild(typingIndicator);
+        }
+
+        chatBody.appendChild(messageDiv);
+
+        // Scroll to bottom
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+
+      function showTypingIndicator(show) {
+        const typingIndicator = document.getElementById("typing-indicator");
+        const chatBody = document.getElementById("chat-body");
+
+        if (show) {
+          typingIndicator.style.display = "block";
+          chatBody.appendChild(typingIndicator);
+          chatBody.scrollTop = chatBody.scrollHeight;
+        } else {
+          typingIndicator.style.display = "none";
+        }
+      }
+
+      // Initialize with sample conversation if needed
+      function initChat() {
+        // Optional: Add initial message
+        const chatBody = document.getElementById("chat-body");
+
+        // Ensure chat is accessible
+        document.addEventListener("keydown", function (event) {
+          if (event.ctrlKey && event.key === "/") {
+            event.preventDefault();
+            toggleChat();
+          }
+        });
+      }
+
+      // Initialize when page loads
+      document.addEventListener("DOMContentLoaded", initChat);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,930 @@
+<!-- healthwebUI/templates/articles/index.html -->
+{% extends 'base.html' %}
+{% block title %}
+Articles | Medical Aids
+{% endblock %}
+{% block extra_css %}
+<style>
+  /* ================= FOOTER ================= */
+    .footer {
+        background: linear-gradient(to bottom, #111, #000);
+        color: #ccc;
+        padding: 50px 8% 25px;
+        text-align: center;
+    }
+
+    .footer-top p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #bbb;
+        max-width: 900px;
+        margin: 0 auto 12px;
+    }
+
+    .footer-top span {
+        display: block;
+        margin-top: 10px;
+        font-size: 14px;
+        color: #fff;
+    }
+
+    .footer-divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.15);
+        margin: 30px 0 22px;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 35px;
+    }
+
+    .footer-links a {
+        color: #ddd;
+        font-size: 14px;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+        color: #ff5b5b;
+    }
+  /* ================= ARTICLES HERO ================= */
+  .articles-hero {
+    background: linear-gradient(135deg, #0a2a4a 0%, #062b45 100%);
+    color: white;
+    padding: 60px 8%;
+    text-align: center;
+  }
+
+  .articles-hero h1 {
+    font-size: 42px;
+    font-weight: 400;
+    margin-bottom: 20px;
+  }
+
+  .articles-hero h1 span {
+    color: #ff5b5b;
+    font-weight: 600;
+  }
+
+  .articles-hero p {
+    font-size: 18px;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #e0e0e0;
+  }
+
+  /* ================= ARTICLES CONTENT ================= */
+  .articles-section {
+    padding: 80px 8%;
+    background: #f6f7f9;
+  }
+
+  .articles-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ================= MAIN ARTICLES ================= */
+  .main-articles {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .article-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+  }
+
+  .article-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  .article-category {
+    background: #0a2a4a;
+    color: white;
+    padding: 10px 25px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    display: inline-block;
+    border-radius: 0 0 10px 0;
+  }
+
+  .article-content {
+    padding: 30px;
+  }
+
+  .article-content h2 {
+    color: #0a2a4a;
+    font-size: 24px;
+    margin: 15px 0;
+    line-height: 1.4;
+  }
+
+  .article-content p {
+    color: #555;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 25px;
+  }
+
+  .read-more-btn {
+    background: #ff5b5b;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .read-more-btn:hover {
+    background: #e04a4a;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 91, 91, 0.3);
+  }
+
+  /* ================= SIDEBAR ================= */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .sidebar-box {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .sidebar-title {
+    color: #0a2a4a;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #ff5b5b;
+  }
+
+  .quote-box {
+    background: linear-gradient(135deg, #0a2a4a, #062b45);
+    color: white;
+    text-align: center;
+    border-radius: 15px;
+    padding: 40px 30px;
+  }
+
+  .quote-box h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .quote-box p {
+    font-size: 16px;
+    margin-bottom: 25px;
+    opacity: 0.9;
+  }
+
+  .quote-btn {
+    background: #ff5b5b;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    width: 100%;
+  }
+
+  .quote-btn:hover {
+    background: #e04a4a;
+    transform: translateY(-2px);
+  }
+
+  .latest-posts ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .latest-posts li {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .latest-posts li:last-child {
+    border-bottom: none;
+  }
+
+  .latest-posts a {
+    color: #0a2a4a;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    display: block;
+    line-height: 1.5;
+  }
+
+  .latest-posts a:hover {
+    color: #ff5b5b;
+  }
+
+  /* ================= MODAL ================= */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1002;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    padding: 20px;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal {
+    background: white;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: translateY(30px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .modal-overlay.active .modal {
+    transform: translateY(0);
+  }
+
+  .modal-header {
+    background: linear-gradient(135deg, #0a2a4a, #062b45);
+    color: white;
+    padding: 25px 30px;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-category {
+    background: #ff5b5b;
+    color: white;
+    padding: 6px 15px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+
+  .modal-title {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  .close-modal {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+  }
+
+  .close-modal:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .modal-body {
+    padding: 40px;
+    color: #333;
+  }
+
+  .modal-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, #e3f2fd, #f0f8ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: #0a2a4a;
+  }
+
+  .modal-content {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .modal-content p {
+    margin-bottom: 20px;
+  }
+
+  .modal-content ul {
+    padding-left: 20px;
+    margin-bottom: 20px;
+  }
+
+  .modal-content li {
+    margin-bottom: 10px;
+  }
+
+  .modal-content strong {
+    color: #0a2a4a;
+  }
+
+  .modal-cta {
+    background: #f0f8ff;
+    border-left: 4px solid #ff5b5b;
+    padding: 25px;
+    border-radius: 10px;
+    margin: 40px 0;
+    text-align: center;
+  }
+
+  .modal-cta h3 {
+    color: #0a2a4a;
+    margin-bottom: 15px;
+    font-size: 20px;
+  }
+
+  .modal-cta-btn {
+    background: #ff5b5b;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    margin-top: 10px;
+  }
+
+  .modal-cta-btn:hover {
+    background: #e04a4a;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 91, 91, 0.3);
+  }
+
+  /* ================= RESPONSIVE DESIGN ================= */
+  @media (max-width: 1024px) {
+    .articles-container {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .articles-hero h1 {
+      font-size: 36px;
+    }
+
+    .sidebar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .articles-hero {
+      padding: 50px 5%;
+    }
+
+    .articles-hero h1 {
+      font-size: 32px;
+    }
+
+    .articles-hero p {
+      font-size: 16px;
+    }
+
+    .articles-section {
+      padding: 60px 5%;
+    }
+
+    .modal-body {
+      padding: 25px;
+    }
+
+    .modal-header {
+      padding: 20px;
+    }
+
+    .modal-title {
+      font-size: 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .articles-hero h1 {
+      font-size: 28px;
+    }
+
+    .article-content h2 {
+      font-size: 20px;
+    }
+
+    .modal {
+      max-height: 95vh;
+    }
+
+    .modal-title {
+      font-size: 20px;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-image {
+      height: 200px;
+      font-size: 36px;
+    }
+  }
+
+  /* ================= ARTICLE MODAL STYLES ================= */
+  .article-option {
+    background: #e8f4fd;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 3px solid #0a2a4a;
+  }
+
+  .article-option h4 {
+    color: #0a2a4a;
+    margin: 0 0 8px 0;
+    font-size: 16px;
+  }
+
+  .article-option p {
+    margin: 0;
+    font-size: 15px;
+  }
+</style>
+{% endblock %} {% block content %}
+<!-- HERO SECTION -->
+<section class="articles-hero">
+  <h1>Medical Aid <span>Articles</span></h1>
+  <p>
+    Expert advice, tips, and insights to help you make informed decisions about
+    your medical aid coverage.
+  </p>
+</section>
+
+<!-- ARTICLES SECTION -->
+<section class="articles-section">
+  <div class="articles-container">
+    <!-- MAIN ARTICLES -->
+    <div class="main-articles">
+      <!-- Article 1 -->
+      <div class="article-card" id="article1">
+        <div class="article-category">TIPS & ADVICE</div>
+        <div class="article-content">
+          <h2>
+            What To Do When Your Medical Savings Run Dry Before The Year Is
+            Over?
+          </h2>
+          <p>
+            Of the few South Africans who are fortunate to have access to a
+            medical aid, most seem to have depleted their savings by the middle
+            of each year. Most of the big medical aids such as Discovery offer a
+            member savings account (MSA) as part of their benefits.
+          </p>
+          <p>
+            The MSA is a percentage of the contribution that is set aside for
+            day-to-day medical expenses such as doctors' consultations and
+            prescriptions. While the initial amount in the MSA might sound like
+            a lot of money...
+          </p>
+          <button class="read-more-btn" onclick="openModal('modal1')">
+            <span>Read More</span>
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Article 2 -->
+      <div class="article-card" id="article2">
+        <div class="article-category">TIPS & ADVICE</div>
+        <div class="article-content">
+          <h2>The Pharmacy Price War Of 2019</h2>
+          <p>
+            The rising cost of private healthcare and crippled public health
+            service makes it necessary for South Africans to take care of their
+            health. It's too expensive to get sick in South Africa unless you
+            can brave the long queues and non-availability of staff and
+            medicines at clinics and hospitals.
+          </p>
+          <p>
+            The face of the South African pharmacy has changed drastically in
+            the last 20 years. The advent of the chain store pharmacy has made
+            it difficult for privately-owned pharmacy owners to keep...
+          </p>
+          <button class="read-more-btn" onclick="openModal('modal2')">
+            <span>Read More</span>
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <!-- Medical Aid Quote Box -->
+      <div class="sidebar-box quote-box">
+        <h3>Medical Aid Quote</h3>
+        <p>Looking for a medical aid quote?</p>
+        <button class="quote-btn">Click Here</button>
+      </div>
+
+      <!-- Latest Posts -->
+      <div class="sidebar-box latest-posts">
+        <h3 class="sidebar-title">LATEST POSTS</h3>
+        <ul>
+          <li>
+            <a href="#" onclick="openModal('modal1')"
+              >What to do When Your Medical Savings Run Dry Before the Year Is
+              Over?</a
+            >
+          </li>
+          <li>
+            <a href="#" onclick="openModal('modal2')"
+              >The Pharmacy Price War of 2019</a
+            >
+          </li>
+          <li><a href="#">Deciphering Medical Aid Terms</a></li>
+          <li>
+            <a href="#">What You Need to Know When Joining a Medical Aid</a>
+          </li>
+          <li>
+            <a href="#">10 Massive Medical Aid Changes You Should Know About</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL 1: Medical Savings Article -->
+<div class="modal-overlay" id="modal1">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-category">TIPS & ADVICE</div>
+        <h2 class="modal-title">
+          What To Do When Your Medical Savings Run Dry Before The Year Is Over?
+        </h2>
+      </div>
+      <button class="close-modal" onclick="closeModal('modal1')">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-image">
+        <span>💰</span>
+        <!-- Money emoji as placeholder for image -->
+      </div>
+
+      <div class="modal-content">
+        <p>
+          Of the few South Africans who are fortunate to have access to a
+          medical aid, most seem to have depleted their savings by the middle of
+          each year. Most of the big medical aids such as Discovery offer a
+          member savings account (MSA) as part of their benefits.
+        </p>
+
+        <div class="modal-cta">
+          <h3>GET A HOSPITAL INSURANCE QUOTE</h3>
+          <p>Protect yourself when medical savings run out</p>
+          <button class="modal-cta-btn">Get Quote Now</button>
+        </div>
+
+        <p>
+          The MSA is a percentage of the contribution that is set aside for
+          day-to-day medical expenses such as doctors' consultations and
+          prescriptions. While the initial amount in the MSA might sound like a
+          lot of money, it's inclined to disappear very quickly. Medical care is
+          expensive, and savings are depleted quickly.
+        </p>
+
+        <p>
+          Unfortunately, medical needs don't stop at the same time that savings
+          run dry. Medical aid members now face the challenge of continuing to
+          pay their contributions while funding medical expenses as well.
+        </p>
+
+        <h3>What are your options?</h3>
+
+        <div class="article-option">
+          <h4>Explore your benefits</h4>
+          <p>
+            In addition to medical treatments and savings accounts, many medical
+            aids offer preventive care that the scheme funds. For example, you
+            might be entitled to a Pap smear, PSA test and flu vaccine dose,
+            among others. Making use of these benefits makes the early diagnosis
+            of medical conditions possible. Early intervention will cost less
+            than the price of advanced stage.
+          </p>
+        </div>
+
+        <div class="article-option">
+          <h4>Know what you're entitled to</h4>
+          <p>
+            While you still have savings, be clear on what is going to be
+            deducted from them. For example, some medical aids deduct the cost
+            of radiology and pathology from the savings account, while others do
+            not. When you receive the benefit guidelines for the year, read
+            through it carefully. This strategy allows you to budget to make
+            sure you aren't going to deplete your savings too soon.
+          </p>
+        </div>
+
+        <div class="article-option">
+          <h4>Treatment of PMB conditions</h4>
+          <p>
+            Prescribed minimum benefits (PMBs) dictate that certain conditions
+            must be treated whether you have savings or not. It includes several
+            common medical conditions such as diabetes and hypertension.
+            Consultations for these conditions will be paid for despite a lack
+            of savings provided they are billed correctly by the consulting
+            doctor.
+          </p>
+        </div>
+
+        <div class="article-option">
+          <h4>Child benefits</h4>
+          <p>
+            Your medical aid may offer payment for consultations for children
+            even if you've depleted your savings. The coverage varies from one
+            medical aid to another. Refer to the benefits guide or contact your
+            medical aid directly.
+          </p>
+        </div>
+
+        <div class="article-option">
+          <h4>Chronic medication</h4>
+          <p>
+            Depending on your plan, your approved chronic medication should be
+            deducted from a separate fund. Make sure you and your doctor have
+            filled in the necessary paperwork. If you don't, chronic medication
+            costs are deducted from your savings.
+          </p>
+        </div>
+
+        <div class="article-option">
+          <h4>Upgrading your plan</h4>
+          <p>
+            You might want to investigate upgrading your medical aid plan to get
+            access to more savings. However, the cost of your contribution will
+            increase. Weigh up the extra money you'll pay against the added
+            savings. It might be worth your while to invest the difference in a
+            savings account of your own.
+          </p>
+        </div>
+
+        <div class="article-option">
+          <h4>Generic medication</h4>
+          <p>
+            Always check whether your prescribed medication has a cheaper
+            generic version. Use generics whenever possible, while you have
+            savings and after you don't. It saves you money either way.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 2: Pharmacy Price War Article -->
+<div class="modal-overlay" id="modal2">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-category">TIPS & ADVICE</div>
+        <h2 class="modal-title">The Pharmacy Price War Of 2019</h2>
+      </div>
+      <button class="close-modal" onclick="closeModal('modal2')">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-image">
+        <span>💊</span>
+        <!-- Pill emoji as placeholder for image -->
+      </div>
+
+      <div class="modal-content">
+        <p>
+          The rising cost of private healthcare and crippled public health
+          service makes it necessary for South Africans to take care of their
+          health. It's too expensive to get sick in South Africa unless you can
+          brave the long queues and non-availability of staff and medicines at
+          clinics and hospitals.
+        </p>
+
+        <p>
+          The face of the South African pharmacy has changed drastically in the
+          last 20 years. The advent of the chain store pharmacy has made it
+          difficult for privately-owned pharmacy owners to keep their businesses
+          afloat. This has led to what many are calling the "Pharmacy Price War
+          of 2019."
+        </p>
+
+        <h3>How the Price War Affects Consumers</h3>
+
+        <div class="article-option">
+          <h4>Increased Competition</h4>
+          <p>
+            With major retail chains entering the pharmaceutical market,
+            consumers now have more options than ever before. This competition
+            has driven prices down on many common medications, making healthcare
+            more accessible to the average South African.
+          </p>
+        </div>
+
+        <div class="article-option">
+          <h4>Convenience vs. Personalized Service</h4>
+          <p>
+            While chain pharmacies offer convenience and lower prices, many
+            independent pharmacies provide more personalized service. They often
+            know their customers by name and can offer tailored advice about
+            medications and health conditions.
+          </p>
+        </div>
+
+        <div class="article-option">
+          <h4>Impact on Quality</h4>
+          <p>
+            Some experts worry that the focus on price competition might
+            compromise the quality of service. However, all pharmacies in South
+            Africa must adhere to strict regulatory standards, ensuring that
+            medications are dispensed safely regardless of where you purchase
+            them.
+          </p>
+        </div>
+
+        <div class="modal-cta">
+          <h3>NEED MEDICAL AID ADVICE?</h3>
+          <p>Our experts can help you choose the right plan for your needs</p>
+          <button class="modal-cta-btn">Get Free Consultation</button>
+        </div>
+
+        <h3>Tips for Smart Pharmacy Shopping</h3>
+
+        <div class="article-option">
+          <h4>Compare Prices</h4>
+          <p>
+            Don't assume all pharmacies charge the same prices. Take the time to
+            compare prices for your regular medications at different pharmacies
+            in your area. You might be surprised at the differences.
+          </p>
+        </div>
+
+        <div class="article-option">
+          <h4>Ask About Generic Alternatives</h4>
+          <p>
+            Generic medications contain the same active ingredients as
+            brand-name drugs but are typically much cheaper. Always ask your
+            doctor or pharmacist if a generic alternative is available for your
+            prescription.
+          </p>
+        </div>
+
+        <div class="article-option">
+          <h4>Check Your Medical Aid Benefits</h4>
+          <p>
+            Some medical aid plans have preferred pharmacy networks that offer
+            better pricing. Check with your medical aid to see if you can save
+            money by using specific pharmacies.
+          </p>
+        </div>
+
+        <div class="article-option">
+          <h4>Consider Mail Order Pharmacies</h4>
+          <p>
+            For chronic medications, mail order pharmacies can often offer
+            significant savings. These services deliver your medications
+            directly to your door, saving you time and potentially money.
+          </p>
+        </div>
+
+        <p>
+          The pharmacy price war of 2019 has ultimately benefited South African
+          consumers by making medications more affordable. However, it's
+          important to balance price considerations with the quality of service
+          and advice you receive from your pharmacist.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  // Modal Functions
+  function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden"; // Prevent scrolling
+  }
+
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove("active");
+    document.body.style.overflow = "auto"; // Restore scrolling
+  }
+
+  // Close modal when clicking outside
+  document.querySelectorAll(".modal-overlay").forEach((modal) => {
+    modal.addEventListener("click", function (e) {
+      if (e.target === this) {
+        const modalId = this.id;
+        closeModal(modalId);
+      }
+    });
+  });
+
+  // Close modal with Escape key
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      document.querySelectorAll(".modal-overlay.active").forEach((modal) => {
+        modal.classList.remove("active");
+      });
+      document.body.style.overflow = "auto";
+    }
+  });
+
+  // Latest posts click handlers
+  document.querySelectorAll(".latest-posts a").forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      // Only handle clicks for the first two articles
+      if (this.textContent.includes("Medical Savings")) {
+        openModal("modal1");
+      } else if (this.textContent.includes("Pharmacy Price War")) {
+        openModal("modal2");
+      }
+      // For other articles, you would need to create additional modals
+    });
+  });
+
+  // Quote button handler
+  document.querySelector(".quote-btn").addEventListener("click", function () {
+    alert("Redirecting to quote page...");
+    // In a real implementation, this would redirect to a quote form
+    // window.location.href = '/quote';
+  });
+
+  // Modal CTA button handlers
+  document.querySelectorAll(".modal-cta-btn").forEach((btn) => {
+    btn.addEventListener("click", function () {
+      alert(
+        "Thank you for your interest! A representative will contact you shortly."
+      );
+      // In a real implementation, this would trigger a form or redirect
+    });
+  });
+</script>
+{% endblock %}

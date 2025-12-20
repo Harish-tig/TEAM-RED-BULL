@@ -1,0 +1,1220 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Medical Aids South Africa{% endblock %}
+
+{% block extra_css %}
+<style>
+
+    /* ================= HERO ================= */
+    .hero-wrap {
+        display: grid;
+        grid-template-columns: 420px 1fr;
+        gap: 70px;
+        padding: 70px 8%;
+        background: #fff;
+        align-items: center;
+    }
+
+    .quote-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 400px;
+        margin: auto;
+    }
+
+    .quote-img {
+        width: 100%;
+        border-radius: 20px;
+        margin-bottom: -40px;
+        z-index: 1;
+        position: relative;
+    }
+
+    .quote-box {
+        position: relative;
+        z-index: 2;
+        background: linear-gradient(145deg, #0b0b0b, #151515);
+        color: #fff;
+        padding: 30px;
+        border-radius: 28px;
+        box-shadow: 0 25px 45px rgba(0, 0, 0, 0.35);
+    }
+
+    .quote-box h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 22px;
+        letter-spacing: 1px;
+    }
+
+    .quote-box h3 span {
+        color: #ff5b5b;
+    }
+
+    .quote-box input {
+        width: 100%;
+        padding: 14px 16px;
+        margin-bottom: 14px;
+        border-radius: 10px;
+        border: none;
+        font-size: 14px;
+    }
+
+    .quote-box button {
+        width: 100%;
+        padding: 16px;
+        border-radius: 30px;
+        border: none;
+        background: #ff5b5b;
+        color: #fff;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    /* ===== HERO TEXT ===== */
+    .hero-text h1 {
+        font-size: 48px;
+        font-weight: 400;
+        line-height: 1.2;
+    }
+
+    .hero-text h1 span {
+        color: #ff5b5b;
+        font-weight: 600;
+    }
+
+    .hero-text .price {
+        color: #ff5b5b;
+        font-size: 26px;
+        font-weight: 600;
+        margin: 12px 0;
+    }
+
+    .hero-text p {
+        font-size: 18px;
+        margin-bottom: 18px;
+    }
+
+    .hero-text .benefits-title {
+        color: #ff5b5b;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 18px;
+    }
+
+    .hero-text ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .hero-text li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 14px;
+        font-size: 16px;
+    }
+
+    .hero-text li::before {
+        content: "✓";
+        width: 26px;
+        height: 26px;
+        background: #111;
+        color: #fff;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 14px;
+        font-weight: 700;
+    }
+
+    .hero-text small {
+        display: block;
+        margin-top: 18px;
+        font-size: 12px;
+        color: #666;
+    }
+
+    /* ================= WHY CHOOSE US ================= */
+    .why {
+        padding: 80px 12%;
+        text-align: center;
+        background: #fff;
+    }
+
+    .why h2 {
+        font-size: 42px;
+        margin-bottom: 20px;
+    }
+
+    .why h2 span {
+        color: #ff5b5b;
+    }
+
+    .why p {
+        max-width: 900px;
+        margin: 0 auto 30px;
+        font-size: 16px;
+        line-height: 1.7;
+        color: #333;
+    }
+
+    .why button {
+        padding: 16px 42px;
+        border-radius: 40px;
+        background: #fff;
+        border: 2px solid #ff5b5b;
+        color: #ff5b5b;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    /* ================= KEY HIGHLIGHTS ================= */
+    .highlights {
+        padding: 90px 8%;
+        background: #f6f7f9;
+    }
+
+    .highlights h2 {
+        font-size: 42px;
+        margin-bottom: 60px;
+    }
+
+    .highlights h2 span {
+        color: #ff5b5b;
+    }
+
+    .highlight-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 28px;
+    }
+
+    .highlight-card {
+        background: #062b45;
+        color: #fff;
+        padding: 40px 26px;
+        border-radius: 26px;
+        position: relative;
+        text-align: center;
+    }
+
+    .highlight-card .icon {
+        width: 56px;
+        height: 56px;
+        background: #ff5b5b;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: -70px auto 20px;
+        font-size: 22px;
+    }
+
+    .highlight-card h4 {
+        margin-bottom: 12px;
+        font-size: 18px;
+    }
+
+    .highlight-card p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #e0e0e0;
+    }
+
+    .highlight-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: #ff5b5b;
+        border-radius: 0 0 26px 26px;
+    }
+
+    /* ================= LATEST NEWS ================= */
+    .news {
+        padding: 90px 8%;
+        background: #fff;
+    }
+
+    .news h2 {
+        text-align: center;
+        font-size: 42px;
+        margin-bottom: 60px;
+    }
+
+    .news h2 span {
+        color: #ff5b5b;
+    }
+
+    .news-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+
+    .news-card {
+        border-radius: 30px;
+        overflow: hidden;
+        background: #062b45;
+    }
+
+    .news-card img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .news-card .news-title {
+        padding: 22px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        line-height: 1.5;
+    }
+
+    /* ================= FAQ SECTION ================= */
+    .faq {
+        padding: 100px 8%;
+        background: radial-gradient(circle at center, #2a2a2a, #0f0f0f);
+        color: #fff;
+    }
+
+    .faq-container {
+        max-width: 1200px;
+        margin: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: start;
+    }
+
+    .faq-left h2 {
+        font-size: 52px;
+        line-height: 1.1;
+        margin-bottom: 20px;
+    }
+
+    .faq-left h2 span {
+        color: #ff5b5b;
+    }
+
+    .faq-left p {
+        font-size: 15px;
+        color: #ccc;
+        max-width: 480px;
+        line-height: 1.6;
+    }
+
+    .faq-right {
+        background: #121212;
+        padding: 40px;
+        border-radius: 20px;
+    }
+
+    .faq-item {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .faq-question {
+        width: 100%;
+        background: none;
+        border: none;
+        color: #ff5b5b;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: left;
+        padding: 18px 0;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-question span {
+        font-size: 18px;
+        transition: transform 0.3s ease;
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s ease;
+        color: #ddd;
+        font-size: 14px;
+        line-height: 1.6;
+        padding-right: 20px;
+    }
+
+    .faq-answer p {
+        padding-bottom: 18px;
+    }
+
+    .faq-item.active .faq-answer {
+        max-height: 300px;
+    }
+
+    .faq-item.active .faq-question span {
+        transform: rotate(180deg);
+    }
+
+    /* ================= SWITCH & SAVE STRIP ================= */
+    .switch-save {
+        background: linear-gradient(135deg, #0a2f44, #06304a);
+        padding: 45px 8%;
+    }
+
+    .switch-save-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .switch-save-text {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        color: #ffffff;
+        font-size: 22px;
+        margin-right: 22px;
+        letter-spacing: 1px;
+    }
+
+    .switch-save-text span {
+        font-weight: 400;
+        opacity: 0.85;
+        font-size: 16px;
+    }
+
+    .switch-save-text strong {
+        font-weight: 800;
+    }
+
+    .switch-save-btn {
+        background: #061b28;
+        color: #ffffff;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .switch-save-btn:hover {
+        background: #042131;
+    }
+
+    /* ================= FOOTER ================= */
+    .footer {
+        background: linear-gradient(to bottom, #111, #000);
+        color: #ccc;
+        padding: 50px 8% 25px;
+        text-align: center;
+    }
+
+    .footer-top p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #bbb;
+        max-width: 900px;
+        margin: 0 auto 12px;
+    }
+
+    .footer-top span {
+        display: block;
+        margin-top: 10px;
+        font-size: 14px;
+        color: #fff;
+    }
+
+    .footer-divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.15);
+        margin: 30px 0 22px;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 35px;
+    }
+
+    .footer-links a {
+        color: #ddd;
+        font-size: 14px;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+        color: #ff5b5b;
+    }
+
+    /* ================= CHATBOT STYLES ================= */
+    #chatbot-icon {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #0a2f44, #ff5b5b);
+        color: white;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 4px 20px rgba(10, 47, 68, 0.3);
+        transition: all 0.3s ease;
+        animation: pulse 2s infinite;
+    }
+
+    #chatbot-icon:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 25px rgba(10, 47, 68, 0.4);
+    }
+
+    #chatbot-icon.active {
+        background: linear-gradient(135deg, #ff5b5b, #0a2f44);
+    }
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(255, 91, 91, 0.4);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(255, 91, 91, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(255, 91, 91, 0);
+        }
+    }
+
+    #chatbot-window {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 380px;
+        height: 500px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid #e0e0e0;
+    }
+
+    .chat-header {
+        background: linear-gradient(135deg, #0a2f44, #06304a);
+        color: white;
+        padding: 18px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background 0.3s ease;
+    }
+
+    .close-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .chat-body {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        background: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .message {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        font-size: 14px;
+        line-height: 1.5;
+        word-wrap: break-word;
+    }
+
+    .user-message {
+        align-self: flex-end;
+        background: #0a2f44;
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+
+    .bot-message {
+        align-self: flex-start;
+        background: white;
+        color: #333;
+        border: 1px solid #e0e0e0;
+        border-bottom-left-radius: 4px;
+    }
+
+    .typing-indicator {
+        align-self: flex-start;
+        background: white;
+        padding: 12px 16px;
+        border-radius: 18px;
+        border: 1px solid #e0e0e0;
+        display: none;
+    }
+
+    .typing-indicator span {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #0a2f44;
+        border-radius: 50%;
+        margin: 0 2px;
+        animation: typing 1.4s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+        0%,
+        60%,
+        100% {
+            transform: translateY(0);
+        }
+        30% {
+            transform: translateY(-5px);
+        }
+    }
+
+    .chat-input-container {
+        padding: 15px;
+        background: white;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        gap: 10px;
+    }
+
+    #chat-input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 24px;
+        font-size: 14px;
+        outline: none;
+        transition: border 0.3s ease;
+    }
+
+    #chat-input:focus {
+        border-color: #0a2f44;
+    }
+
+    #send-btn {
+        background: #0a2f44;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease;
+    }
+
+    #send-btn:hover {
+        background: #06304a;
+    }
+
+    .welcome-message {
+        text-align: center;
+        color: #666;
+        font-size: 12px;
+        margin-top: 10px;
+    }
+
+    .disclaimer {
+        font-size: 11px;
+        color: #999;
+        margin-top: 5px;
+        line-height: 1.4;
+    }
+
+    .suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .suggestion-btn {
+        background: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 16px;
+        padding: 6px 12px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .suggestion-btn:hover {
+        background: #e0e0e0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero-wrap">
+    <div class="quote-wrapper">
+        <img
+            src="https://medicalaidsinsouthafrica.co.za/wp-content/uploads/2025/11/form-img-1.webp"
+            alt="Decorative Image"
+            class="quote-img"
+        />
+        <div class="quote-box">
+            <h3>GET A <span>QUOTE</span> NOW</h3>
+            <input placeholder="First Name" />
+            <input placeholder="Last Name" />
+            <input placeholder="ID Number" />
+            <input placeholder="Email Address" />
+            <input placeholder="Mobile Number" />
+            <button>GIVE ME A QUOTE</button>
+        </div>
+    </div>
+
+    <div class="hero-text">
+        <h1>Need affordable <span>quality healthcare cover?</span></h1>
+        <div class="price">Get Flexicare from only R350pm*</div>
+        <p>
+            Get unlimited consultation, medicine, dentistry, optometry and so much
+            more!
+        </p>
+
+        <div class="benefits-title">ACCESS TO YOUR BENEFITS ON THE GO:</div>
+        <ul>
+            <li>Digital membership card</li>
+            <li>Find network providers</li>
+            <li>Book GP consultations</li>
+            <li>Membership certificate</li>
+            <li>Benefit information</li>
+            <li>Ask Flexicare</li>
+        </ul>
+
+        <small>
+            Flexicare is not a medical scheme. The cover is not the same as that
+            of a medical scheme and is not governed by the Medical Schemes Act.
+            Terms, conditions and limits apply.
+        </small>
+    </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="why">
+    <h2>WHY <span>CHOOSE</span> US?</h2>
+    <p>
+        We make choosing medical aid simple by offering comprehensive and
+        affordable cover, a wide network of trusted healthcare providers, fast
+        and hassle-free claims, and added wellness benefits — all designed to
+        give you reliable protection, convenient access to care, and complete
+        peace of mind.
+    </p>
+    <button>GET A QUOTE NOW</button>
+</section>
+
+<!-- KEY HIGHLIGHTS -->
+<section class="highlights">
+    <h2>KEY <span>HIGHLIGHTS</span></h2>
+
+    <div class="highlight-grid">
+        <div class="highlight-card">
+            <div class="icon">🔄</div>
+            <h4>Comprehensive Coverage</h4>
+            <p>
+                Get reliable protection for everyday health needs, emergencies, and
+                long-term care.
+            </p>
+        </div>
+
+        <div class="highlight-card">
+            <div class="icon">☀️</div>
+            <h4>Affordable Plans</h4>
+            <p>
+                Choose a medical aid option that fits your budget without
+                compromising quality.
+            </p>
+        </div>
+
+        <div class="highlight-card">
+            <div class="icon">⚡</div>
+            <h4>Fast Claims Processing</h4>
+            <p>
+                Enjoy a hassle-free claims experience designed to save you time and
+                stress.
+            </p>
+        </div>
+
+        <div class="highlight-card">
+            <div class="icon">🌍</div>
+            <h4>Wide Network of Providers</h4>
+            <p>
+                Access trusted hospitals, clinics, and specialists anytime you need
+                care.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- LATEST NEWS -->
+<section class="news">
+    <h2>LATEST <span>NEWS</span></h2>
+
+    <div class="news-grid">
+        <div class="news-card">
+            <div style="width: 100%; height: 280px; background: linear-gradient(135deg, #0a2a4a, #062b45); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">📰</div>
+            <div class="news-title">
+                What to do When Your Medical Savings Run Dry Before the Year is
+                Over?
+            </div>
+        </div>
+
+        <div class="news-card">
+            <div style="width: 100%; height: 280px; background: linear-gradient(135deg, #0a2a4a, #062b45); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">💊</div>
+            <div class="news-title">The Pharmacy Price War of 2019</div>
+        </div>
+
+        <div class="news-card">
+            <div style="width: 100%; height: 280px; background: linear-gradient(135deg, #0a2a4a, #062b45); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">📋</div>
+            <div class="news-title">Deciphering Medical Aid Terms</div>
+        </div>
+
+        <div class="news-card">
+            <div style="width: 100%; height: 280px; background: linear-gradient(135deg, #0a2a4a, #062b45); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">🏥</div>
+            <div class="news-title">
+                What You Need to Know When Joining a Medical Aid
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+    <div class="faq-container">
+        <div class="faq-left">
+            <h2>Frequently Asked <span>Questions</span></h2>
+            <p>
+                Find clear answers to the most common questions about our medical
+                aid plans, coverage, and services—so you can make informed decisions
+                with confidence.
+            </p>
+        </div>
+
+        <div class="faq-right">
+            <div class="faq-item">
+                <button class="faq-question">
+                    What is a medical aid?
+                    <span>⌄</span>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        A medical aid is a membership-based health cover that helps pay
+                        for your day-to-day medical expenses, hospital stays, and
+                        essential treatments. It works by pooling members' contributions
+                        to cover healthcare costs according to the plan you choose.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What is the difference between medical aid and health insurance?
+                    <span>⌄</span>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        Medical aid pays according to the Medical Schemes Act and covers
+                        Prescribed Minimum Benefits (PMBs), while health insurance
+                        provides fixed cash benefits for specific events. Medical aid
+                        offers broader and more comprehensive healthcare coverage.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    How do I choose the best medical aid plan?
+                    <span>⌄</span>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        Consider your healthcare needs, budget, chronic conditions,
+                        family size, and preferred hospitals. Compare benefits like
+                        hospital cover, day-to-day limits, chronic medicine, and network
+                        restrictions before deciding.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Do medical aids cover pre-existing conditions?
+                    <span>⌄</span>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        Yes, but there may be waiting periods for certain conditions or
+                        treatments. These can be either a general waiting period (3
+                        months) or a condition-specific waiting period (12 months).
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What is a waiting period?
+                    <span>⌄</span>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        A waiting period is a timeframe during which you are unable to
+                        claim certain benefits. This is applied to prevent misuse of
+                        medical cover by joining only when you need treatment.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    How much does medical aid cost in South Africa?
+                    <span>⌄</span>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        Pricing varies by plan type, benefits, and provider.
+                        Contributions can range from affordable hospital plans to more
+                        comprehensive options with extensive day-to-day benefits.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SWITCH & SAVE -->
+<section class="switch-save">
+    <div class="switch-save-inner">
+        <div class="switch-save-text">
+            <p>SWITCH<strong> & SAVE</strong></p>
+            <span>WITH</span>
+            <p>AFFORDABLE <strong>MEDICAL AID</strong></p>
+        </div>
+
+        <button class="switch-save-btn">SWITCH AND SAVE</button>
+    </div>
+</section>
+
+<!-- ================= CHATBOT ================= -->
+<div id="chatbot-icon" onclick="toggleChat()">💬</div>
+
+<div id="chatbot-window">
+    <div class="chat-header">
+        <span>Health Assistant 🤖</span>
+        <button class="close-btn" onclick="toggleChat()">×</button>
+    </div>
+
+    <div class="chat-body" id="chat-body">
+        <!-- Welcome message -->
+        <div class="bot-message message">
+            Hello! I'm your Health Assistant. I can help you with:
+            <br /><br />
+            • Medical aid plan information<br />
+            • Healthcare coverage questions<br />
+            • Medical terminology explanations<br />
+            • Health and wellness advice<br />
+            • Medical scheme comparisons
+            <br /><br />
+            <div class="welcome-message">
+                Note: This is an AI assistant. For medical emergencies, please
+                consult a healthcare professional immediately.
+            </div>
+            <div class="disclaimer">
+                Powered by Google Gemini AI. Not a substitute for professional
+                medical advice.
+            </div>
+
+            <!-- Quick suggestions -->
+            <div class="suggestions">
+                <button
+                    class="suggestion-btn"
+                    onclick="sendSuggestion('What is a medical aid waiting period?')"
+                >
+                    Waiting periods
+                </button>
+                <button
+                    class="suggestion-btn"
+                    onclick="sendSuggestion('Compare medical aid plans')"
+                >
+                    Compare plans
+                </button>
+                <button
+                    class="suggestion-btn"
+                    onclick="sendSuggestion('What does medical aid cover?')"
+                >
+                    Coverage
+                </button>
+                <button
+                    class="suggestion-btn"
+                    onclick="sendSuggestion('How to choose medical aid?')"
+                >
+                    Choosing aid
+                </button>
+            </div>
+        </div>
+
+        <!-- Typing indicator -->
+        <div class="typing-indicator" id="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div class="chat-input-container">
+        <input
+            type="text"
+            id="chat-input"
+            placeholder="Ask about medical aid, healthcare, coverage..."
+            onkeypress="handleKeyPress(event)"
+        />
+        <button id="send-btn" onclick="sendMessage()">➤</button>
+    </div>
+</div>
+<!-- ================= END CHATBOT ================= -->
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log("HealthWeb UI Loaded");
+
+        // FAQ Accordion functionality
+        document.querySelectorAll(".faq-question").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const item = btn.parentElement;
+                item.classList.toggle("active");
+            });
+        });
+
+        // Form submission handling (basic example)
+        const quoteButton = document.querySelector(".quote-box button");
+        if (quoteButton) {
+            quoteButton.addEventListener("click", function (e) {
+                e.preventDefault();
+                const inputs = document.querySelectorAll(".quote-box input");
+                let allFilled = true;
+
+                inputs.forEach((input) => {
+                    if (!input.value.trim()) {
+                        allFilled = false;
+                        input.style.border = "2px solid red";
+                    } else {
+                        input.style.border = "none";
+                    }
+                });
+
+                if (allFilled) {
+                    alert("Thank you! Your quote request has been submitted.");
+                    inputs.forEach((input) => (input.value = ""));
+                } else {
+                    alert("Please fill in all fields.");
+                }
+            });
+        }
+
+        // Add hover effects to buttons
+        const buttons = document.querySelectorAll("button:not(.faq-question)");
+        buttons.forEach((button) => {
+            button.addEventListener("mouseenter", () => {
+                button.style.transform = "translateY(-2px)";
+                button.style.transition = "transform 0.3s ease";
+            });
+            button.addEventListener("mouseleave", () => {
+                button.style.transform = "translateY(0)";
+            });
+        });
+    });
+
+    // ⚠️ DO NOT expose API key in production
+    const GEMINI_API_KEY = "AIzaSyAzruNL8lOtxgP996vyAMsT_yM0wAGWpFM";
+
+    // ✅ ONLY VALID MODEL
+    const GEMINI_MODEL = "gemini-1.5-flash";
+
+    // ✅ ONLY VALID ENDPOINT
+    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+
+    // Healthcare system context
+    const HEALTHCARE_CONTEXT = `
+You are a professional Health Assistant for Medical Aids in South Africa.
+
+Rules:
+- Answer ONLY healthcare & medical aid questions
+- No diagnosis or prescriptions
+- Explain PMBs, waiting periods, coverage clearly
+- Always suggest consulting professionals
+- Keep answers short, clear & helpful
+`;
+
+    /* ================= STATE ================= */
+
+    let chatHistory = [];
+
+    /* ================= UI FUNCTIONS ================= */
+
+    function toggleChat() {
+        const chat = document.getElementById("chatbot-window");
+        const icon = document.getElementById("chatbot-icon");
+
+        if (chat.style.display === "flex") {
+            chat.style.display = "none";
+            icon.classList.remove("active");
+        } else {
+            chat.style.display = "flex";
+            icon.classList.add("active");
+            setTimeout(() => document.getElementById("chat-input").focus(), 100);
+        }
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === "Enter") sendMessage();
+    }
+
+    function sendSuggestion(text) {
+        document.getElementById("chat-input").value = text;
+        sendMessage();
+    }
+
+    function addMessage(text, sender) {
+        const chatBody = document.getElementById("chat-body");
+        const msg = document.createElement("div");
+        msg.className = `message ${sender}-message`;
+        msg.textContent = text;
+        chatBody.appendChild(msg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function showTyping(show) {
+        const typing = document.getElementById("typing-indicator");
+        typing.style.display = show ? "block" : "none";
+    }
+
+    /* ================= MESSAGE FLOW ================= */
+
+    function sendMessage() {
+        const input = document.getElementById("chat-input");
+        const text = input.value.trim();
+        if (!text) return;
+
+        addMessage(text, "user");
+        input.value = "";
+        showTyping(true);
+
+        chatHistory.push(text);
+        fetchGemini(text);
+    }
+
+    /* ================= GEMINI API ================= */
+
+    async function fetchGemini(userMessage) {
+        try {
+            const requestBody = {
+                contents: [
+                    {
+                        role: "user",
+                        parts: [
+                            {
+                                text: `${HEALTHCARE_CONTEXT}\n\nUser question:\n${userMessage}`,
+                            },
+                        ],
+                    },
+                ],
+                generationConfig: {
+                    temperature: 0.7,
+                    topP: 0.9,
+                    maxOutputTokens: 512,
+                },
+            };
+
+            const response = await fetch(GEMINI_API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestBody),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Gemini API failed: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            const reply =
+                data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+                "Sorry, I couldn't generate a response.";
+
+            showTyping(false);
+            addMessage(reply, "bot");
+        } catch (err) {
+            console.error(err);
+            showTyping(false);
+            addMessage(
+                "⚠️ I'm having connection issues right now. Please try again shortly.",
+                "bot"
+            );
+        }
+    }
+
+    /* ================= SHORTCUT ================= */
+
+    document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.key === "/") {
+            e.preventDefault();
+            toggleChat();
+        }
+    });
+</script>
+{% endblock %}

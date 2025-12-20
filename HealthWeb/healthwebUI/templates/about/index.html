@@ -1,0 +1,585 @@
+{% extends 'base.html' %}
+{% block title %}
+About Us - Medical Aids South Africa
+{% endblock %}
+{% block extra_css %}
+<style>
+  /* ================= FOOTER ================= */
+    .footer {
+        background: linear-gradient(to bottom, #111, #000);
+        color: #ccc;
+        padding: 50px 8% 25px;
+        text-align: center;
+    }
+
+    .footer-top p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #bbb;
+        max-width: 900px;
+        margin: 0 auto 12px;
+    }
+
+    .footer-top span {
+        display: block;
+        margin-top: 10px;
+        font-size: 14px;
+        color: #fff;
+    }
+
+    .footer-divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.15);
+        margin: 30px 0 22px;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 35px;
+    }
+
+    .footer-links a {
+        color: #ddd;
+        font-size: 14px;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+        color: #ff5b5b;
+    }
+  /* ================= ABOUT HERO ================= */
+  .about-hero {
+    background: linear-gradient(135deg, #0a2a4a 0%, #062b45 100%);
+    color: white;
+    padding: 60px 8%;
+    text-align: center;
+  }
+
+  .about-hero h1 {
+    font-size: 42px;
+    font-weight: 400;
+    margin-bottom: 20px;
+  }
+
+  .about-hero h1 span {
+    color: #ff5b5b;
+    font-weight: 600;
+  }
+
+  .about-hero p {
+    font-size: 18px;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #e0e0e0;
+  }
+
+  /* ================= CONTENT SECTIONS ================= */
+  .section {
+    padding: 80px 8%;
+  }
+
+  .section-alt {
+    background: #f6f7f9;
+  }
+
+  .section-title {
+    font-size: 36px;
+    margin-bottom: 40px;
+    color: #0a2a4a;
+    position: relative;
+  }
+
+  .section-title span {
+    color: #ff5b5b;
+  }
+
+  .section-title::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: #ff5b5b;
+  }
+
+  .section-title.center {
+    text-align: center;
+  }
+
+  .section-title.center::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* ================= WHAT WE DO ================= */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+  }
+
+  .feature-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+    border-top: 4px solid #ff5b5b;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .feature-card h3 {
+    color: #0a2a4a;
+    margin-bottom: 15px;
+    font-size: 20px;
+  }
+
+  .feature-card p {
+    color: #555;
+    font-size: 16px;
+  }
+
+  /* ================= WHY CHOOSE US ================= */
+  .benefits-list {
+    max-width: 800px;
+    margin: 40px auto 0;
+  }
+
+  .benefit-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .benefit-icon {
+    background: #ff5b5b;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-right: 20px;
+    flex-shrink: 0;
+  }
+
+  .benefit-content h4 {
+    color: #0a2a4a;
+    margin: 0 0 10px 0;
+    font-size: 18px;
+  }
+
+  .benefit-content p {
+    color: #555;
+    margin: 0;
+  }
+
+  /* ================= PARTNERS & COMPLIANCE ================= */
+  .compliance-section {
+    background: linear-gradient(135deg, #0a2f44, #06304a);
+    color: white;
+    border-radius: 20px;
+    padding: 50px;
+    margin-top: 40px;
+  }
+
+  .compliance-section h3 {
+    color: #ff5b5b;
+    margin-bottom: 25px;
+    font-size: 24px;
+  }
+
+  .compliance-section ul {
+    padding-left: 20px;
+    margin-bottom: 30px;
+  }
+
+  .compliance-section li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+  }
+
+  .compliance-section p {
+    color: #e0e0e0;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  /* ================= OUR PROMISE ================= */
+  .promise-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+  }
+
+  .promise-card {
+    background: #062b45;
+    color: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .promise-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #ff5b5b;
+  }
+
+  .promise-icon {
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: #ff5b5b;
+  }
+
+  .promise-card h4 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .promise-card p {
+    color: #e0e0e0;
+    font-size: 15px;
+  }
+
+  /* ================= CONTACT INFO ================= */
+  .contact-info {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+  }
+
+  .contact-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+  }
+
+  .contact-item h4 {
+    color: #0a2a4a;
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+
+  .contact-item p {
+    color: #555;
+    margin: 5px 0;
+  }
+
+  .email-link {
+    color: #ff5b5b;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .email-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ================= RESPONSIVE DESIGN ================= */
+  @media (max-width: 1024px) {
+    .about-hero h1 {
+      font-size: 36px;
+    }
+
+    .section-title {
+      font-size: 32px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .about-hero {
+      padding: 50px 5%;
+    }
+
+    .about-hero h1 {
+      font-size: 32px;
+    }
+
+    .about-hero p {
+      font-size: 16px;
+    }
+
+    .section {
+      padding: 60px 5%;
+    }
+
+    .section-title {
+      font-size: 28px;
+    }
+
+    .compliance-section {
+      padding: 30px;
+    }
+
+    .benefit-item {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .benefit-icon {
+      margin-right: 0;
+      margin-bottom: 15px;
+    }
+
+    .contact-info {
+      padding: 30px 20px;
+    }
+
+    .feature-card {
+      padding: 30px 20px;
+    }
+
+    .promise-card {
+      padding: 30px 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .about-hero h1 {
+      font-size: 28px;
+    }
+
+    .section-title {
+      font-size: 24px;
+    }
+
+    .compliance-section {
+      padding: 20px;
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<!-- HERO SECTION -->
+<section class="about-hero">
+  <h1>About <span>Us</span></h1>
+  <p>
+    At Medical Aids in South Africa, we make it easy to compare medical aid
+    plans online. Our goal is to help you find reliable, affordable cover with
+    clear information and a simple process — no jargon, no confusion.
+  </p>
+</section>
+
+<!-- WHAT WE DO -->
+<section class="section">
+  <h2 class="section-title">What We <span>Do</span></h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <h3>Compare Leading Medical Schemes</h3>
+      <p>
+        Compare leading CMS-registered medical schemes to find the best coverage
+        for your needs and budget.
+      </p>
+    </div>
+    <div class="feature-card">
+      <h3>Personalized Quotes</h3>
+      <p>
+        Provide fast, personalised medical aid quotes tailored to your specific
+        requirements.
+      </p>
+    </div>
+    <div class="feature-card">
+      <h3>Licensed Advisors</h3>
+      <p>
+        Work with FSCA-licensed advisors accredited for Health Service Benefits
+        to ensure professional guidance.
+      </p>
+    </div>
+    <div class="feature-card">
+      <h3>Hassle-Free Applications</h3>
+      <p>
+        Make online applications quick and hassle-free with our streamlined
+        process.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section section-alt">
+  <h2 class="section-title center">Why Choose <span>Us</span></h2>
+  <div class="benefits-list">
+    <div class="benefit-item">
+      <div class="benefit-icon">✓</div>
+      <div class="benefit-content">
+        <h4>Independent and Transparent</h4>
+        <p>
+          We provide unbiased comparisons with full transparency about all
+          medical aid options.
+        </p>
+      </div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">✓</div>
+      <div class="benefit-content">
+        <h4>No Sales Pressure</h4>
+        <p>
+          Get the information you need without any pushy sales tactics or hidden
+          agendas.
+        </p>
+      </div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">✓</div>
+      <div class="benefit-content">
+        <h4>Simple Comparisons</h4>
+        <p>
+          Easy-to-understand comparisons that cut through the complexity of
+          medical aid plans.
+        </p>
+      </div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">✓</div>
+      <div class="benefit-content">
+        <h4>Right Coverage Focus</h4>
+        <p>
+          Focused on helping you choose the right medical cover that matches
+          your specific needs.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS & COMPLIANCE -->
+<section class="section">
+  <h2 class="section-title">Registered Medical Aid <span>Partners</span></h2>
+  <div class="compliance-section">
+    <p>We only partner with:</p>
+    <ul>
+      <li>
+        Registered Medical Schemes listed under the Council for Medical Schemes
+        (CMS)
+      </li>
+      <li>
+        FSCA-licensed Financial Service Providers (FSPs) accredited for:
+        <ul>
+          <li>Category A1 – Health Service Benefits</li>
+        </ul>
+      </li>
+    </ul>
+    <p>
+      This ensures all advice, quotes, and communication comply with South
+      African medical scheme laws.
+    </p>
+
+    <h3>Your Consent & Communication</h3>
+    <p>
+      By submitting your details on our website, you consent to receiving
+      medical aid offers and related communications from our verified
+      CMS-registered and FSCA-licensed partners. You may opt out at any time
+      using the unsubscribe link in our SMS or emails, or by contacting:
+      <a href="mailto:info@medicalaidsinsouthafrica.co.za" class="email-link"
+        >info@medicalaidsinsouthafrica.co.za</a
+      >. All partners operate under confidentiality agreements and comply with
+      South African financial and data protection laws.
+    </p>
+
+    <h3>Legal Ownership & Compliance</h3>
+    <p>This website is owned and operated by:</p>
+    <p>
+      <strong>LIME HOLDINGS (Pty) Ltd</strong><br />
+      Atlantic Beach Golf Estate, Melkbosstrand, Western Cape, 7441
+    </p>
+
+    <p>We comply with:</p>
+    <ul>
+      <li>Medical Schemes Act</li>
+      <li>Council for Medical Schemes (CMS) regulations</li>
+      <li>FSCA requirements for Health Service Benefits</li>
+      <li>POPIA & ECTA</li>
+      <li>Google Ads and Microsoft Ads advertising standards</li>
+    </ul>
+    <p>
+      We securely store a digital record of each submission (device, browser,
+      IP, and voluntarily submitted details) for up to one (1) year for
+      verification and complaint resolution.
+    </p>
+  </div>
+</section>
+
+<!-- OUR PROMISE -->
+<section class="section section-alt">
+  <h2 class="section-title center">Our <span>Promise</span></h2>
+  <div class="promise-grid">
+    <div class="promise-card">
+      <div class="promise-icon">🔒</div>
+      <h4>Transparency</h4>
+      <p>Full transparency in how your data is used and how we operate</p>
+    </div>
+    <div class="promise-card">
+      <div class="promise-icon">🛡️</div>
+      <h4>Security</h4>
+      <p>Your information is protected through encrypted systems</p>
+    </div>
+    <div class="promise-card">
+      <div class="promise-icon">📋</div>
+      <h4>Legitimacy</h4>
+      <p>Working only with CMS-registered schemes and FSCA-licensed partners</p>
+    </div>
+    <div class="promise-card">
+      <div class="promise-icon">💡</div>
+      <h4>Support</h4>
+      <p>Helping you make informed decisions with confidence</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT INFO -->
+<section class="section">
+  <h2 class="section-title">Contact <span>Us</span></h2>
+  <div class="contact-info">
+    <div class="contact-details">
+      <div class="contact-item">
+        <h4>Company</h4>
+        <p><strong>LIME HOLDINGS (Pty) Ltd</strong></p>
+      </div>
+      <div class="contact-item">
+        <h4>Address</h4>
+        <p>Atlantic Beach Golf Estate</p>
+        <p>Melkbosstrand, Western Cape, 7441</p>
+      </div>
+      <div class="contact-item">
+        <h4>Postal Address</h4>
+        <p>Suite 354, Private Bag X1</p>
+        <p>Melkbostrand, 7437</p>
+      </div>
+      <div class="contact-item">
+        <h4>Email</h4>
+        <p>
+          <a
+            href="mailto:info@medicalaidsinsouthafrica.co.za"
+            class="email-link"
+            >info@medicalaidsinsouthafrica.co.za</a
+          >
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

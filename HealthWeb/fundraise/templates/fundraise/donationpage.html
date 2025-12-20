@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medical Donations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+      /* ================= GLOBAL ================= */
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #fff;
+        color: #111;
+        padding: 0;
+      }
+
+      /* ================= NAVBAR ================= */
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 7%;
+        background: #fff;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 40px;
+      }
+
+      .logo {
+        font-size: 26px;
+        font-weight: 700;
+      }
+
+      .logo span:first-child {
+        color: #0a2a4a;
+      }
+      .logo span:last-child {
+        color: #ff5b5b;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #000;
+        font-weight: 500;
+        margin-left: 28px;
+        padding: 8px 18px;
+        border-radius: 20px;
+      }
+
+      nav a.active {
+        background: #ff5b5b;
+        color: #fff;
+      }
+
+      /* ================= DONATION CONTAINER ================= */
+      .donation-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 40px;
+        padding: 0 8% 80px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      /* ================= DONATION CARD ================= */
+      .donation-card {
+        background: #062b45;
+        color: #fff;
+        border-radius: 30px;
+        overflow: hidden;
+        position: relative;
+        transition: transform 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .donation-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .donation-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: #ff5b5b;
+        border-radius: 0 0 30px 30px;
+      }
+
+      /* ================= CARD IMAGE ================= */
+      .donation-img-wrapper {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .donation-img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.3s ease;
+      }
+
+      .donation-card:hover .donation-img {
+        transform: scale(1.05);
+      }
+
+      .urgency-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #ff5b5b;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        z-index: 2;
+      }
+
+      /* ================= CARD BODY ================= */
+      .donation-body {
+        padding: 30px;
+      }
+
+      .donation-title {
+        font-size: 22px;
+        font-weight: 600;
+        margin: 0 0 15px 0;
+        color: #fff;
+        line-height: 1.4;
+      }
+
+      .child-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .child-info strong {
+        font-size: 18px;
+        color: #fff;
+      }
+
+      .child-info .age {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 14px;
+      }
+
+      /* ================= PROGRESS BAR ================= */
+      .progress-section {
+        margin: 25px 0;
+      }
+
+      .progress-text {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .progress-bar {
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ff5b5b, #ff7b7b);
+        border-radius: 4px;
+        transition: width 0.8s ease;
+      }
+
+      /* ================= DONATE BUTTON ================= */
+      .donate-btn {
+        display: block;
+        width: 100%;
+        padding: 18px;
+        background: #ff5b5b;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+        margin-top: 20px;
+        letter-spacing: 0.5px;
+      }
+
+      .donate-btn:hover {
+        background: #ff4545;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 91, 91, 0.3);
+      }
+
+      /* ================= NO POSTS MESSAGE ================= */
+      .no-posts {
+        text-align: center;
+        grid-column: 1 / -1;
+        padding: 60px 20px;
+        font-size: 18px;
+        color: #666;
+      }
+
+      /* ================= DETAIL PAGE ================= */
+      .detail-container {
+        max-width: min(900px, 95vw);
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 30px;
+        padding: 40px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      }
+
+      .detail-header {
+        margin-bottom: 40px;
+        text-align: center;
+      }
+
+      .detail-title {
+        font-size: 36px;
+        font-weight: 600;
+        color: #111;
+        margin-bottom: 15px;
+        line-height: 1.2;
+      }
+
+      .detail-subtitle {
+        font-size: 18px;
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto 30px;
+      }
+
+      .detail-img-wrapper {
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 40px;
+        position: relative;
+      }
+
+      .detail-img {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+      }
+
+      .detail-content {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      @media (min-width: 768px) {
+        .detail-content {
+          grid-template-columns: 2fr 1fr;
+        }
+      }
+
+      /* ================= RESPONSIVE ADJUSTMENTS ================= */
+      @media (max-width: 768px) {
+        .donation-container {
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          padding: 0 5% 60px;
+          gap: 30px;
+        }
+
+        .detail-container {
+          padding: 30px 20px;
+          border-radius: 20px;
+        }
+
+        .detail-title {
+          font-size: 28px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .donation-container {
+          grid-template-columns: 1fr;
+          padding: 0 20px 40px;
+        }
+
+        .donation-body {
+          padding: 20px;
+        }
+
+        .donation-title {
+          font-size: 20px;
+        }
+
+        .detail-img {
+          height: 250px;
+        }
+      }
+
+      /* ================= SWITCH & SAVE STRIP ================= */
+      .switch-save {
+        background: linear-gradient(135deg, #0a2f44, #06304a);
+        padding: 45px 8%;
+        margin-top: 80px;
+      }
+
+      .switch-save-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .switch-save-text {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        color: #ffffff;
+        font-size: 22px;
+        margin-right: 22px;
+        letter-spacing: 1px;
+      }
+
+      .switch-save-text span {
+        font-weight: 400;
+        opacity: 0.85;
+        font-size: 16px;
+      }
+
+      .switch-save-text strong {
+        font-weight: 800;
+      }
+
+      .switch-save-btn {
+        background: #061b28;
+        color: #ffffff;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .switch-save-btn:hover {
+        background: #042131;
+      }
+
+      /* ================= FOOTER ================= */
+      .footer {
+        background: linear-gradient(to bottom, #111, #000);
+        color: #ccc;
+        padding: 50px 8% 25px;
+        text-align: center;
+      }
+
+      .footer-top p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #bbb;
+        max-width: 900px;
+        margin: 0 auto 12px;
+      }
+
+      .footer-top span {
+        display: block;
+        margin-top: 10px;
+        font-size: 14px;
+        color: #fff;
+      }
+
+      .footer-divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.15);
+        margin: 30px 0 22px;
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 35px;
+      }
+
+      .footer-links a {
+        color: #ddd;
+        font-size: 14px;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .footer-links a:hover {
+        color: #ff5b5b;
+      }
+    </style>
+</head>
+
+<body>
+
+<!-- Navigation -->
+<nav>
+    <div class="logo">
+        <span>Medical</span><span>Donations</span>
+    </div>
+    <div>
+        <a href="#" class="active">Home</a>
+        <a href="#">Campaigns</a>
+        <a href="#">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+    </div>
+</nav>
+
+<!-- Donation Cards -->
+<div class="donation-container">
+    {% if posts %}
+    {% for post in posts %}
+    <div class="donation-card">
+        {% if post.image %}
+        <div class="donation-img-wrapper">
+            <img src="{{ post.image.url }}" alt="Donation Case Image" class="donation-img">
+            <div class="urgency-badge">Urgent</div>
+        </div>
+        {% endif %}
+
+        <div class="donation-body">
+            <h2 class="donation-title">{{ post.title }}</h2>
+
+            <div class="child-info">
+                <strong>{{ post.child_name }}</strong>
+                <span class="age">{{ post.age }} yrs</span>
+            </div>
+
+            <!-- Progress -->
+            <div class="progress-section">
+                <div class="progress-text">
+                    <span>Raised ₹{{ post.raised_amount }}</span>
+                    <span>Target ₹{{ post.target_amount }}</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"
+                         style="width: {{ post.progress_percentage }}%;">
+                    </div>
+                </div>
+            </div>
+
+            <a href="{% url 'donation_detail' post.id %}" class="donate-btn">
+                Donate Now
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="no-posts">No active donation campaigns right now.</p>
+    {% endif %}
+</div>
+
+<!-- Switch & Save Strip -->
+<div class="switch-save">
+    <div class="switch-save-inner">
+        <div class="switch-save-text">
+            <span>Every contribution matters.</span>
+            <strong>Join 5000+ donors making a difference</strong>
+        </div>
+        <button class="switch-save-btn">START A FUNDRAISER</button>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <div class="footer-top">
+        <p>Medical Donations is committed to connecting donors with those in need. Our platform ensures transparent and efficient distribution of medical aid to children and families facing health challenges.</p>
+        <span>© 2024 Medical Donations. All rights reserved.</span>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact Us</a>
+        <a href="#">FAQ</a>
+        <a href="#">Transparency Report</a>
+    </div>
+</div>
+
+</body>
+</html>

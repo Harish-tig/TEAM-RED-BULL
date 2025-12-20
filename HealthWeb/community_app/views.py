@@ -32,7 +32,7 @@ def home(request):
         'categories': categories,
         'search_query': search_query,
     }
-    return render(request, 'community_app/home.html', context)
+    return render(request, 'community_app/community_home.html', context)
 
 
 def question_detail(request, question_id):
@@ -58,22 +58,22 @@ def question_detail(request, question_id):
     }
     return render(request, 'community_app/question_detail.html', context)
 
-
-@login_required
-def ask_question(request):
-    if request.method == 'POST':
-        form = QuestionForm(request.POST)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.user = request.user
-            question.save()
-            messages.success(request, 'Your question has been posted!')
-            return redirect('question_detail', question_id=question.id)
-    else:
-        form = QuestionForm()
-
-    context = {'form': form}
-    return render(request, 'community_app/ask_question.html', context)
+#
+# @login_required
+# def ask_question(request):
+#     if request.method == 'POST':
+#         form = QuestionForm(request.POST)
+#         if form.is_valid():
+#             question = form.save(commit=False)
+#             question.user = request.user
+#             question.save()
+#             messages.success(request, 'Your question has been posted!')
+#             return redirect('question_detail', question_id=question.id)
+#     else:
+#         form = QuestionForm()
+#
+#     context = {'form': form}
+#     return render(request, 'community_app/ask_question.html', context)
 
 
 @login_required
@@ -186,3 +186,25 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out.')
     return redirect('home')
+
+
+@login_required
+def ask_question(request):
+    categories = Category.objects.all()
+
+    if request.method == 'POST':
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.user = request.user
+            question.save()
+            messages.success(request, 'Your question has been posted!')
+            return redirect('question_detail', question_id=question.id)
+    else:
+        form = QuestionForm()
+
+    context = {
+        'form': form,
+        'categories': categories  # Add this line
+    }
+    return render(request, 'community_app/ask_question.html', context)

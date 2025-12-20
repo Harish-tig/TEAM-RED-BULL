@@ -1,0 +1,204 @@
+<nav>
+    <!-- Logo image on left -->
+    <a href="/">
+        <img
+            src="https://medicalaidsinsouthafrica.co.za/wp-content/uploads/2025/11/medaidlogo.webp"
+            alt="Medical Aids Logo"
+            class="logo-img"
+        />
+    </a>
+
+    <!-- Community link next to logo -->
+    <a href="/community/" class="community-link">
+        <i class="fas fa-users"></i> Community
+    </a>
+
+    <!-- Original navigation links in the center -->
+    <div class="nav-center">
+        <a href="/" {% if request.path == '/' %}class="active"{% endif %}>Home</a>
+        <a href="/articles/" {% if '/articles/' in request.path %}class="active"{% endif %}>Articles</a>
+        <a href="/find-doctor/" {% if '/find-doctor/' in request.path %}class="active"{% endif %}>Find Doctor</a>
+        <a href="/about/" {% if '/about/' in request.path %}class="active"{% endif %}>About</a>
+        <a href="/contact/" {% if '/contact/' in request.path %}class="active"{% endif %}>Contact Us</a>
+    </div>
+
+    <!-- Auth links on the right -->
+    <div class="auth-links">
+        <a href="/redirect_login/" class="login-link">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </a>
+        <a href="/register/" class="signup-link">
+            <i class="fas fa-user-plus"></i> Sign Up
+        </a>
+    </div>
+</nav>
+
+<style>
+    /* ================= NAVBAR ================= */
+    nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 7%; /* Reduced by 5px */
+        background: #fff;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Logo and Community link on left */
+    .logo-img {
+        height: 50px;
+        width: auto;
+        margin-right: 15px; /* Space between logo and community link */
+    }
+
+    /* Community link next to logo */
+    .community-link {
+        text-decoration: none;
+        color: #000;
+        font-weight: 500;
+        padding: 8px 18px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-right: auto; /* Push other content to center/right */
+    }
+
+    .community-link:hover {
+        background: #f0f0f0;
+    }
+
+    /* Original navigation links in center */
+    .nav-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+    }
+
+    .nav-center a {
+        text-decoration: none;
+        color: #000;
+        font-weight: 500;
+        margin-left: 28px;
+        padding: 8px 18px;
+        border-radius: 20px;
+    }
+
+    .nav-center a.active {
+        background: #ff5b5b;
+        color: #fff;
+    }
+
+    .nav-center a:hover:not(.active) {
+        background: #f0f0f0;
+    }
+
+    /* Auth links on the right */
+    .auth-links {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-left: auto; /* Push to the right */
+    }
+
+    .login-link, .signup-link {
+        text-decoration: none;
+        color: #000;
+        font-weight: 500;
+        padding: 8px 18px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .login-link:hover, .signup-link:hover {
+        background: #f0f0f0;
+    }
+
+    .login-link.active, .signup-link.active {
+        background: #ff5b5b;
+        color: #fff;
+    }
+
+    /* Font Awesome icons */
+    .community-link i,
+    .login-link i,
+    .signup-link i {
+        font-size: 16px;
+    }
+
+    /* ================= RESPONSIVE DESIGN ================= */
+    @media (max-width: 1024px) {
+        nav {
+            flex-wrap: wrap;
+        }
+
+        .nav-center {
+            order: 3;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .community-link {
+            margin-right: 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        nav {
+            flex-direction: column;
+            gap: 15px;
+            padding: 13px 5%;
+        }
+
+        .logo-img {
+            margin-right: 10px;
+        }
+
+        .nav-center a {
+            margin-left: 15px;
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
+        .community-link,
+        .login-link,
+        .signup-link {
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
+        .auth-links {
+            gap: 10px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .logo-img {
+            height: 45px;
+            margin-right: 5px;
+        }
+
+        .nav-center a {
+            margin-left: 10px;
+            padding: 5px 10px;
+            font-size: 13px;
+        }
+
+        .community-link,
+        .login-link,
+        .signup-link {
+            padding: 5px 10px;
+            font-size: 13px;
+        }
+
+        .auth-links {
+            gap: 8px;
+        }
+    }
+</style>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

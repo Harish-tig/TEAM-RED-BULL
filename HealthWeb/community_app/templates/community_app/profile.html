@@ -1,44 +1,47 @@
 {% extends 'community_app/base.html' %}
-
+{% load static %}
 
 {% block title %}{{ profile_user.username }}'s Profile - HealthConnect{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="max-w-6xl mx-auto">
-    <!-- Profile Header -->
-    <div class="card mb-6">
-        <div class="flex items-start gap-6">
-            <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center">
+<div class="profile-container">
+    <!-- Profile Header Card -->
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="profile-image-container">
                 {% if profile.profile_picture %}
-                    <img src="{{ profile.profile_picture.url }}"
-                         alt="{{ profile_user.username }}"
-                         class="w-full h-full rounded-full object-cover">
+                    <img src="{{ profile.profile_picture.url }}" alt="{{ profile_user.username }}" class="profile-image">
                 {% else %}
-                    <i class="fas fa-user text-3xl text-gray-400"></i>
+                    <div class="profile-default-image">
+                        <i class="fas fa-user"></i>
+                    </div>
                 {% endif %}
             </div>
-            <div class="flex-1">
-                <h1 class="text-2xl font-bold">{{ profile_user.username }}</h1>
-                <p class="text-muted mb-4">{{ profile_user.email }}</p>
+            <div class="profile-info">
+                <h1 class="profile-name">{{ profile_user.username }}</h1>
+                <p class="profile-email">{{ profile_user.email }}</p>
 
                 {% if profile.bio %}
-                    <p class="mb-4">{{ profile.bio }}</p>
+                    <p class="profile-bio">{{ profile.bio }}</p>
                 {% endif %}
 
-                {% if profile.health_interest %}
-                    <p class="mb-2">
-                        <strong>Health Interests:</strong> {{ profile.health_interest }}
-                    </p>
-                {% endif %}
+                <div class="profile-tags">
+                    {% if profile.health_interest %}
+                        <span class="profile-tag">{{ profile.health_interest }}</span>
+                    {% endif %}
 
-                {% if profile.expertise %}
-                    <p>
-                        <strong>Expertise:</strong> {{ profile.expertise }}
-                    </p>
-                {% endif %}
+                    {% if profile.expertise %}
+                        <span class="profile-tag">{{ profile.expertise }}</span>
+                    {% endif %}
+                </div>
 
                 {% if user == profile_user %}
-                    <button onclick="toggleEditForm()" class="btn btn-primary mt-4">
+                    <button onclick="toggleEditForm()" class="btn btn-primary">
                         <i class="fas fa-edit"></i> Edit Profile
                     </button>
                 {% endif %}
@@ -46,186 +49,1029 @@
         </div>
     </div>
 
-    <!-- Edit Profile Form (hidden by default) -->
+    <!-- Edit Profile Form Card -->
     {% if user == profile_user %}
-        <form id="edit-profile-form" method="POST" enctype="multipart/form-data"
-              style="display: none;" class="card mb-6">
-            {% csrf_token %}
-            <h3 class="mb-4">Edit Profile</h3>
-            {% for field in form %}
-                <div class="form-group">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}
-                        <div class="text-red-600 text-sm">{{ field.errors }}</div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-            <div class="flex gap-2">
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-                <button type="button" onclick="toggleEditForm()" class="btn">Cancel</button>
-            </div>
-        </form>
-    {% endif %}
-
-    <!-- Tabs -->
-    <div class="flex border-b mb-6">
-        <button id="journeys-tab" onclick="showTab('journeys')"
-                class="px-4 py-2 font-medium border-b-2 border-primary">
-            Health Journey
-        </button>
-        <button id="questions-tab" onclick="showTab('questions')"
-                class="px-4 py-2 font-medium text-muted">
-            My Questions
-        </button>
-        <button id="answers-tab" onclick="showTab('answers')"
-                class="px-4 py-2 font-medium text-muted">
-            My Answers
-        </button>
-    </div>
-
-    <!-- Journeys Tab -->
-    <div id="journeys-content">
-        <div class="flex justify-between items-center mb-4">
-            <h2>Health Journey</h2>
-            {% if user == profile_user %}
-                <a href="{% url 'add_journey' %}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Add Entry
-                </a>
-            {% endif %}
+    <div id="edit-profile-form" class="profile-card edit-form" style="display: none;">
+        <div class="profile-card-header">
+            <h3><i class="fas fa-user-edit"></i> Edit Profile</h3>
         </div>
+        <form method="POST" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+            <div class="form-grid">
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}" class="form-label">
+                            {{ field.label }}
+                            {% if field.field.required %}<span class="required">*</span>{% endif %}
+                        </label>
 
-        {% if journeys %}
-            <div class="space-y-6">
-                {% for journey in journeys %}
-                    <div class="card">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h3 class="font-bold text-lg">{{ journey.title }}</h3>
-                                <p class="text-sm text-muted">{{ journey.date|date:"F j, Y" }}</p>
+                        {% if field.name == 'profile_picture' %}
+                            <div class="file-upload-container">
+                                <div class="file-upload-preview">
+                                    {% if profile.profile_picture %}
+                                        <img src="{{ profile.profile_picture.url }}" alt="Current profile picture" class="current-image">
+                                    {% else %}
+                                        <div class="preview-placeholder">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}" class="file-upload-label">
+                                    <i class="fas fa-camera"></i> Change Photo
+                                </label>
                             </div>
-                        </div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <h4 class="font-medium mb-2">Symptoms</h4>
-                                <p class="text-muted">{{ journey.symptom|linebreaks }}</p>
+                        {% if field.errors %}
+                            <div class="form-error">
+                                <i class="fas fa-exclamation-circle"></i>
+                                {{ field.errors.0 }}
                             </div>
+                        {% endif %}
 
-                            {% if journey.doctor %}
-                                <div>
-                                    <h4 class="font-medium mb-2">Doctor Consulted</h4>
-                                    <p class="text-muted">{{ journey.doctor }}</p>
-                                </div>
-                            {% endif %}
-
-                            {% if journey.test %}
-                                <div>
-                                    <h4 class="font-medium mb-2">Tests Done</h4>
-                                    <p class="text-muted">{{ journey.test|linebreaks }}</p>
-                                </div>
-                            {% endif %}
-
-                            {% if journey.treatment %}
-                                <div>
-                                    <h4 class="font-medium mb-2">Treatment</h4>
-                                    <p class="text-muted">{{ journey.treatment|linebreaks }}</p>
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        {% if journey.notes %}
-                            <div>
-                                <h4 class="font-medium mb-2">Notes</h4>
-                                <p class="text-muted">{{ journey.notes|linebreaks }}</p>
+                        {% if field.help_text %}
+                            <div class="form-help">
+                                <i class="fas fa-info-circle"></i> {{ field.help_text }}
                             </div>
                         {% endif %}
                     </div>
                 {% endfor %}
             </div>
-        {% else %}
-            <div class="card text-center">
-                <p class="text-muted">No journey entries yet.</p>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <button type="button" onclick="toggleEditForm()" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
             </div>
-        {% endif %}
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Profile Tabs -->
+    <div class="profile-tabs">
+        <div class="tab-buttons">
+            <button id="journeys-tab" onclick="showTab('journeys')" class="tab-btn active">
+                <i class="fas fa-history"></i> Health Journey
+            </button>
+            <button id="questions-tab" onclick="showTab('questions')" class="tab-btn">
+                <i class="fas fa-question-circle"></i> My Questions
+            </button>
+            <button id="answers-tab" onclick="showTab('answers')" class="tab-btn">
+                <i class="fas fa-comments"></i> My Answers
+            </button>
+        </div>
     </div>
 
-    <!-- Questions Tab -->
-    <div id="questions-content" style="display: none;">
-        <h2 class="mb-4">My Questions</h2>
-        {% if questions %}
-            {% for question in questions %}
-                <div class="card mb-3">
-                    <h3>
-                        <a href="{% url 'question_detail' question.id %}">
-                            {{ question.title }}
+    <!-- Journeys Content -->
+    <div id="journeys-content" class="tab-content active">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <div class="card-header-content">
+                    <h3><i class="fas fa-history"></i> Health Journey</h3>
+                    {% if user == profile_user %}
+                        <a href="{% url 'add_journey' %}" class="btn btn-primary btn-small">
+                            <i class="fas fa-plus"></i> Add Entry
                         </a>
-                    </h3>
-                    <p class="text-muted text-sm mb-2">
-                        {{ question.created_at|date:"M d, Y" }}
-                    </p>
-                    <p>{{ question.description|truncatewords:30 }}</p>
+                    {% endif %}
                 </div>
-            {% endfor %}
-        {% else %}
-            <div class="card">
-                <p class="text-center text-muted">No questions asked yet.</p>
             </div>
-        {% endif %}
+
+            {% if journeys %}
+                <div class="journey-list">
+                    {% for journey in journeys %}
+                        <div class="journey-item">
+                            <div class="journey-item-header">
+                                <h4 class="journey-title">{{ journey.title }}</h4>
+                                <span class="journey-date">{{ journey.date|date:"F j, Y" }}</span>
+                            </div>
+
+                            <div class="journey-content">
+                                {% if journey.symptom %}
+                                    <div class="journey-section">
+                                        <h5><i class="fas fa-thermometer"></i> Symptoms</h5>
+                                        <p>{{ journey.symptom|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+
+                                {% if journey.doctor %}
+                                    <div class="journey-section">
+                                        <h5><i class="fas fa-user-md"></i> Doctor Consulted</h5>
+                                        <p>{{ journey.doctor }}</p>
+                                    </div>
+                                {% endif %}
+
+                                {% if journey.test %}
+                                    <div class="journey-section">
+                                        <h5><i class="fas fa-flask"></i> Tests Done</h5>
+                                        <p>{{ journey.test|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+
+                                {% if journey.treatment %}
+                                    <div class="journey-section">
+                                        <h5><i class="fas fa-prescription-bottle-alt"></i> Treatment</h5>
+                                        <p>{{ journey.treatment|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+
+                                {% if journey.notes %}
+                                    <div class="journey-section">
+                                        <h5><i class="fas fa-sticky-note"></i> Notes</h5>
+                                        <p>{{ journey.notes|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h4>No Journey Entries Yet</h4>
+                    <p class="empty-text">Start documenting your health journey to track your progress.</p>
+                    {% if user == profile_user %}
+                        <a href="{% url 'add_journey' %}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Your First Entry
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
     </div>
 
-    <!-- Answers Tab -->
-    <div id="answers-content" style="display: none;">
-        <h2 class="mb-4">My Answers</h2>
-        {% if answers %}
-            {% for answer in answers %}
-                <div class="card mb-3">
-                    <h4 class="font-medium mb-2">
-                        <a href="{% url 'question_detail' answer.question.id %}">
-                            {{ answer.question.title }}
-                        </a>
-                    </h4>
-                    <p class="text-muted text-sm mb-2">
-                        Answered on {{ answer.created_at|date:"M d, Y" }}
-                    </p>
-                    <p>{{ answer.text|truncatewords:30 }}</p>
-                </div>
-            {% endfor %}
-        {% else %}
-            <div class="card">
-                <p class="text-center text-muted">No answers given yet.</p>
+    <!-- Questions Content -->
+    <div id="questions-content" class="tab-content">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h3><i class="fas fa-question-circle"></i> My Questions</h3>
             </div>
-        {% endif %}
+
+            {% if questions %}
+                <div class="content-list">
+                    {% for question in questions %}
+                        <div class="content-item" onclick="window.location.href='{% url 'question_detail' question.id %}'">
+                            <div class="content-item-header">
+                                <h4 class="content-title">{{ question.title }}</h4>
+                                <span class="content-date">{{ question.created_at|date:"M d, Y" }}</span>
+                            </div>
+                            <p class="content-preview">{{ question.description|truncatewords:30 }}</p>
+                            <div class="content-meta">
+                                <span class="meta-item">
+                                    <i class="fas fa-comment"></i> {{ question.answer_set.count }} answers
+                                </span>
+                                {% if question.views %}
+                                    <span class="meta-item">
+                                        <i class="fas fa-eye"></i> {{ question.views }} views
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h4>No Questions Asked</h4>
+                    <p class="empty-text">You haven't asked any questions yet.</p>
+                    <a href="{% url 'ask_question' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Ask Your First Question
+                    </a>
+                </div>
+            {% endif %}
+        </div>
     </div>
+
+    <!-- Answers Content -->
+    <div id="answers-content" class="tab-content">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h3><i class="fas fa-comments"></i> My Answers</h3>
+            </div>
+
+            {% if answers %}
+                <div class="content-list">
+                    {% for answer in answers %}
+                        <div class="content-item" onclick="window.location.href='{% url 'question_detail' answer.question.id %}'">
+                            <div class="content-item-header">
+                                <h4 class="content-title">Re: {{ answer.question.title }}</h4>
+                                <span class="content-date">{{ answer.created_at|date:"M d, Y" }}</span>
+                            </div>
+                            <p class="content-preview">{{ answer.text|truncatewords:50 }}</p>
+                            <div class="content-meta">
+                                <span class="meta-item">
+                                    <i class="fas fa-heart"></i> {{ answer.likes.count }} likes
+                                </span>
+                                <span class="meta-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    {% if answer.is_verified %}Verified Answer{% else %}Community Answer{% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h4>No Answers Given</h4>
+                    <p class="empty-text">You haven't answered any questions yet.</p>
+                    <a href="{% url 'home' %}" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Browse Questions
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
 </div>
+<style>
+    /* Profile Container */
+.profile-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Profile Card */
+.profile-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s ease;
+}
+
+.profile-card-header {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-card-header h3 {
+    font-size: 22px;
+    color: #2c3e50;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Profile Header */
+.profile-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+}
+
+.profile-image-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #ff5c5c;
+    flex-shrink: 0;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-default-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    color: #ff5c5c;
+}
+
+.profile-default-image i {
+    font-size: 48px;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-name {
+    font-size: 28px;
+    color: #2c3e50;
+    margin: 0 0 5px 0;
+}
+
+.profile-email {
+    color: #7f8c8d;
+    font-size: 16px;
+    margin: 0 0 15px 0;
+}
+
+.profile-bio {
+    color: #34495e;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.profile-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.profile-tag {
+    background: #e3f2fd;
+    color: #ff5c5c;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #bbdefb;
+}
+
+/* ================= EDIT PROFILE ================= */
+
+.profile-card.edit-form {
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+/* Header */
+.profile-card.edit-form .profile-card-header {
+    margin-bottom: 30px;
+}
+
+.profile-card.edit-form h3 {
+    color: #0a2a4a;
+    font-size: 26px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 12px;
+}
+
+.profile-card.edit-form h3::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 55px;
+    height: 4px;
+    background: #ff5b5b;
+    border-radius: 2px;
+}
+
+/* ================= GRID FIX ================= */
+
+.profile-card.edit-form .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 32px;
+    row-gap: 24px;
+    align-items: start;
+}
+
+/* BIO – left half */
+.profile-card.edit-form .form-group:has(textarea) {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+}
+
+/* HEALTH INTEREST – top right */
+.profile-card.edit-form .form-group:has(input[name="health_interest"]) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+}
+
+/* EXPERTISE – bottom right */
+.profile-card.edit-form .form-group:has(input[name="expertise"]) {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+}
+
+/* PROFILE PICTURE – full width */
+.profile-card.edit-form .form-group:has(input[type="file"]) {
+    grid-column: 1 / 3;
+    grid-row: 3 / 4;
+}
+
+
+/* Form group */
+.profile-card.edit-form .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels */
+.profile-card.edit-form .form-label {
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0a2a4a;
+}
+
+/* Inputs */
+.profile-card.edit-form input[type="text"],
+.profile-card.edit-form input[type="email"],
+.profile-card.edit-form textarea {
+    width: 100%;
+    padding: 10px 14px;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+/* Fixed heights (no jumping) */
+.profile-card.edit-form textarea {
+    min-height: 180px;
+    max-height: 180px;
+    resize: none;
+}
+
+.profile-card.edit-form input[type="text"],
+.profile-card.edit-form input[type="email"] {
+    height: 44px;
+}
+
+/* Focus */
+.profile-card.edit-form input:focus,
+.profile-card.edit-form textarea:focus {
+    outline: none;
+    background: #ffffff;
+    border-color: #ff5b5b;
+    box-shadow: 0 0 0 2px rgba(255, 91, 91, 0.12);
+}
+
+/* Errors */
+.profile-card.edit-form .form-error {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #e04a4a;
+}
+
+/* Help text */
+.profile-card.edit-form .form-help {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #888;
+}
+
+/* ================= IMAGE UPLOAD FIX ================= */
+
+.profile-card.edit-form .file-upload-container {
+    margin-top: 10px;
+    padding: 20px;
+    background: #f6f7f9;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    max-height: 140px;
+    overflow: hidden;
+}
+
+.profile-card.edit-form .file-upload-preview {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid #ff5b5b;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.profile-card.edit-form .file-upload-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-card.edit-form .file-upload-container * {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Buttons */
+.profile-card.edit-form .file-upload-label {
+    background: #ff5b5b;
+    color: #ffffff;
+    border-radius: 24px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.profile-card.edit-form .form-actions {
+    margin-top: 35px;
+    display: flex;
+    gap: 20px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+    .profile-card.edit-form .form-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "bio"
+            "right"
+            "picture";
+    }
+
+    .profile-card.edit-form textarea {
+        max-height: none;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+    /* File Upload */
+    .file-upload-container {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .file-upload-preview {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid #ff5c5c;
+    }
+
+    .file-upload-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .preview-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8fafc;
+        color: #ff5c5c;
+        font-size: 24px;
+    }
+
+    .file-upload-label {
+        background: #ff5c5c;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+    .file-upload-label:hover {
+        background: #2980b9;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    /* Tabs */
+    .profile-tabs {
+        margin-bottom: 20px;
+    }
+
+    .tab-buttons {
+        display: flex;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 16px 20px;
+        background: transparent;
+        border: none;
+        color: #7f8c8d;
+        font-weight: 500;
+        cursor: pointer;
+        font-size: 15px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+        background: #f8fafc;
+        color: #ff5c5c;
+    }
+
+    .tab-btn.active {
+        background: #ff5c5c;
+        color: white;
+        box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+    }
+
+    .tab-content {
+        display: none;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    /* Journey Items */
+    .journey-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .journey-item {
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid #e0e6ed;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .journey-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .journey-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e0e6ed;
+    }
+
+    .journey-title {
+        font-size: 18px;
+        color: #2c3e50;
+        margin: 0;
+    }
+
+    .journey-date {
+        color: #7f8c8d;
+        font-size: 14px;
+        font-weight: 500;
+        background: white;
+        padding: 4px 12px;
+        border-radius: 15px;
+        border: 1px solid #e0e6ed;
+    }
+
+    .journey-content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .journey-section h5 {
+        font-size: 15px;
+        color: #ff5c5c;
+        margin: 0 0 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .journey-section p {
+        color: #34495e;
+        line-height: 1.6;
+        margin: 0;
+        font-size: 14px;
+    }
+
+    /* Content Items (Questions & Answers) */
+    .content-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .content-item {
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid #e0e6ed;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .content-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        border-color: #ff5c5c;
+    }
+
+    .content-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .content-title {
+        font-size: 17px;
+        color: #2c3e50;
+        margin: 0;
+        flex: 1;
+    }
+
+    .content-date {
+        color: #7f8c8d;
+        font-size: 13px;
+        margin-left: 15px;
+        white-space: nowrap;
+    }
+
+    .content-preview {
+        color: #34495e;
+        line-height: 1.6;
+        margin: 0 0 15px 0;
+        font-size: 14px;
+    }
+
+    .content-meta {
+        display: flex;
+        gap: 15px;
+    }
+
+    .meta-item {
+        color: #7f8c8d;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    .btn-primary {
+        background-color: #ff5c5c;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-secondary {
+        background-color: #f8fafc;
+        color: #7f8c8d;
+        border: 1px solid #e0e6ed;
+    }
+
+    .btn-secondary:hover {
+        background-color: #f0f4f8;
+        transform: translateY(-2px);
+    }
+
+    .btn-small {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    /* Empty States */
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .empty-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #ff5c5c, #2980b9);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 32px;
+    }
+
+    .empty-state h4 {
+        font-size: 20px;
+        color: #2c3e50;
+        margin: 0 0 10px 0;
+    }
+
+    .empty-text {
+        color: #7f8c8d;
+        font-size: 15px;
+        margin: 0 0 25px 0;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.5;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .profile-container {
+            padding: 10px;
+        }
+
+        .profile-card {
+            padding: 20px;
+        }
+        .profile-card.hover{
+            color: var(--primary-color);
+            scale: 15px;
+        }
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 20px;
+        }
+
+        .profile-image-container {
+            margin: 0 auto;
+        }
+
+        .profile-tags {
+            justify-content: center;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .tab-buttons {
+            flex-direction: column;
+        }
+
+        .tab-btn {
+            padding: 14px;
+            justify-content: center;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .form-actions .btn {
+            width: 100%;
+        }
+
+        .card-header-content {
+            flex-direction: column;
+            gap: 15px;
+            align-items: stretch;
+            text-align: center;
+        }
+
+        .journey-item-header,
+        .content-item-header {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .content-date {
+            margin-left: 0;
+        }
+
+        .file-upload-container {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .profile-name {
+            font-size: 24px;
+        }
+
+        .profile-image-container {
+            width: 100px;
+            height: 100px;
+        }
+
+        .profile-card-header h3 {
+            font-size: 20px;
+        }
+
+        .journey-title,
+        .content-title {
+            font-size: 16px;
+        }
+    }
+</style>
 
 <script>
     function toggleEditForm() {
         const form = document.getElementById('edit-profile-form');
-        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        if (form.style.display === 'none' || form.style.display === '') {
+            form.style.display = 'block';
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            form.style.display = 'none';
+        }
     }
 
     function showTab(tabName) {
-        // Hide all tabs
-        document.getElementById('journeys-content').style.display = 'none';
-        document.getElementById('questions-content').style.display = 'none';
-        document.getElementById('answers-content').style.display = 'none';
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
 
         // Remove active class from all tab buttons
-        document.getElementById('journeys-tab').classList.remove('border-b-2', 'border-primary');
-        document.getElementById('questions-tab').classList.remove('border-b-2', 'border-primary');
-        document.getElementById('answers-tab').classList.remove('border-b-2', 'border-primary');
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
 
-        document.getElementById('journeys-tab').classList.add('text-muted');
-        document.getElementById('questions-tab').classList.add('text-muted');
-        document.getElementById('answers-tab').classList.add('text-muted');
-
-        // Show selected tab
-        document.getElementById(tabName + '-content').style.display = 'block';
+        // Show selected tab content
+        document.getElementById(tabName + '-content').classList.add('active');
 
         // Add active class to selected tab button
-        document.getElementById(tabName + '-tab').classList.remove('text-muted');
-        document.getElementById(tabName + '-tab').classList.add('border-b-2', 'border-primary');
+        document.getElementById(tabName + '-tab').classList.add('active');
     }
+
+    // Profile picture preview
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.querySelector('input[type="file"]');
+        if (fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.querySelector('.file-upload-preview');
+                        preview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="preview-image">`;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    });
 </script>
 {% endblock %}

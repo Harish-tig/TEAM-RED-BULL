@@ -1,0 +1,642 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Contact Us - Medical Aids South Africa
+{% endblock %}
+{% block extra_css %}
+<style>
+  /* ================= CONTACT HERO ================= */
+  .contact-hero {
+    background: linear-gradient(135deg, #0a2a4a 0%, #062b45 100%);
+    color: white;
+    padding: 60px 8%;
+    text-align: center;
+  }
+
+  .contact-hero h1 {
+    font-size: 42px;
+    font-weight: 400;
+    margin-bottom: 20px;
+  }
+
+  .contact-hero h1 span {
+    color: #ff5b5b;
+    font-weight: 600;
+  }
+
+  .contact-hero p {
+    font-size: 18px;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #e0e0e0;
+  }
+
+  /* ================= CONTACT CONTENT ================= */
+  .contact-section {
+    padding: 80px 8%;
+  }
+
+  .contact-container {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .contact-info {
+    padding: 40px;
+    background: #f6f7f9;
+    border-radius: 20px;
+  }
+
+  .contact-info h2 {
+    color: #0a2a4a;
+    font-size: 28px;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 15px;
+  }
+
+  .contact-info h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: #ff5b5b;
+  }
+
+  .contact-details {
+    margin-top: 30px;
+  }
+
+  .contact-item {
+    margin-bottom: 25px;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .contact-icon {
+    background: #ff5b5b;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+  }
+
+  .contact-text h4 {
+    color: #0a2a4a;
+    margin: 0 0 5px 0;
+    font-size: 16px;
+  }
+
+  .contact-text p {
+    color: #555;
+    margin: 0;
+    font-size: 15px;
+  }
+
+  .contact-text a {
+    color: #ff5b5b;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .contact-text a:hover {
+    text-decoration: underline;
+  }
+
+  /* ================= CONTACT FORM ================= */
+  .contact-form-container {
+    padding: 40px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .contact-form-container h2 {
+    color: #0a2a4a;
+    font-size: 28px;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 15px;
+  }
+
+  .contact-form-container h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: #ff5b5b;
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #0a2a4a;
+    font-size: 14px;
+  }
+
+  .form-label span {
+    color: #ff5b5b;
+  }
+
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: border-color 0.3s ease;
+    background: #f9f9f9;
+  }
+
+  .form-input:focus,
+  .form-textarea:focus {
+    outline: none;
+    border-color: #ff5b5b;
+    background: white;
+  }
+
+  .form-textarea {
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  .checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    margin: 30px 0;
+    padding: 20px;
+    background: #f6f7f9;
+    border-radius: 10px;
+  }
+
+  .form-checkbox {
+    margin-right: 15px;
+    margin-top: 3px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .checkbox-label {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  .checkbox-label a {
+    color: #ff5b5b;
+    text-decoration: none;
+  }
+
+  .checkbox-label a:hover {
+    text-decoration: underline;
+  }
+
+  .submit-btn {
+    background: #ff5b5b;
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .submit-btn:hover {
+    background: #e04a4a;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 91, 91, 0.3);
+  }
+
+  .submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ================= MESSAGES ================= */
+  .messages-container {
+    margin: 20px 0;
+  }
+
+  .alert {
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  .alert-icon {
+    font-size: 20px;
+  }
+
+  /* ================= FORM VALIDATION ================= */
+  .error-message {
+    color: #ff5b5b;
+    font-size: 13px;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .form-input.error,
+  .form-textarea.error {
+    border-color: #ff5b5b;
+    background: #fff5f5;
+  }
+
+  /* ================= LOADING ANIMATION ================= */
+  .loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ================= RESPONSIVE DESIGN ================= */
+  @media (max-width: 1024px) {
+    .contact-container {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .contact-hero h1 {
+      font-size: 36px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .contact-hero {
+      padding: 50px 5%;
+    }
+
+    .contact-hero h1 {
+      font-size: 32px;
+    }
+
+    .contact-hero p {
+      font-size: 16px;
+    }
+
+    .contact-section {
+      padding: 60px 5%;
+    }
+
+    .contact-info,
+    .contact-form-container {
+      padding: 30px;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .contact-hero h1 {
+      font-size: 28px;
+    }
+
+    .contact-info h2,
+    .contact-form-container h2 {
+      font-size: 24px;
+    }
+
+    .contact-info,
+    .contact-form-container {
+      padding: 20px;
+    }
+
+    .checkbox-group {
+      padding: 15px;
+    }
+  }
+  /* ================= FOOTER ================= */
+    .footer {
+        background: linear-gradient(to bottom, #111, #000);
+        color: #ccc;
+        padding: 50px 8% 25px;
+        text-align: center;
+    }
+
+    .footer-top p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #bbb;
+        max-width: 900px;
+        margin: 0 auto 12px;
+    }
+
+    .footer-top span {
+        display: block;
+        margin-top: 10px;
+        font-size: 14px;
+        color: #fff;
+    }
+
+    .footer-divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.15);
+        margin: 30px 0 22px;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 35px;
+    }
+
+    .footer-links a {
+        color: #ddd;
+        font-size: 14px;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+        color: #ff5b5b;
+    }
+</style>
+{% endblock %} {% block content %}
+<!-- HERO SECTION -->
+<section class="contact-hero">
+  <h1>Contact <span>Us</span></h1>
+  <p>
+    We always value our clients' feedback so please feel free to complete the
+    email contact form. We will do our best to get back to you within 24
+    business hours.
+  </p>
+</section>
+
+<!-- MAIN CONTENT -->
+<section class="contact-section">
+  <div class="contact-container">
+    <!-- CONTACT INFORMATION -->
+    <div class="contact-info">
+      <h2>Our Contact Details</h2>
+      <div class="contact-details">
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-text">
+            <h4>Phone Number</h4>
+            <p>+27 (0) 87-250-2009</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-text">
+            <h4>Email Address</h4>
+            <p>
+              <a href="mailto:info@medicalaidsinsouthafrica.co.za"
+                >info@medicalaidsinsouthafrica.co.za</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-text">
+            <h4>Address</h4>
+            <p>Suite 354, Private Bag X1<br />Melkbostrand, 7437</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+        <div class="contact-info">
+      <h2>For Fund Raising Contact.</h2>
+      <div class="contact-details">
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-text">
+            <h4>Phone Number</h4>
+            <p>+91 8097032232</p>
+              <p>+91 7039369562</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-text">
+            <h4>Email Address</h4>
+            <p>
+              <a href="mailto:arinthamke@gmail.com">arinthamke@gmail.com</a>
+                <a href="mailto:nadarharish03@gmail.com">nadarharish03@gmail.com</a>
+            </p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-text">
+            <h4>What details to send?</h4>
+            <p>Patient Name<br />Age, Disease</p>
+              <p>Medical Report<br />Image, Amount Required.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT FORM -->
+    <div class="contact-form-container">
+      <h2>Email Enquiry Form</h2>
+
+      <!-- Django Messages -->
+      {% if messages %}
+      <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          <span class="alert-icon">✓</span>
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form method="POST" action="{% url 'contact' %}" id="contactForm">
+        {% csrf_token %}
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="id_name">Name <span>*</span></label>
+            {{ form.name }} {% if form.name.errors %}
+            <div class="error-message">
+              <span>!</span> {{ form.name.errors.0 }}
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="id_surname"
+              >Surname <span>*</span></label
+            >
+            {{ form.surname }} {% if form.surname.errors %}
+            <div class="error-message">
+              <span>!</span> {{ form.surname.errors.0 }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="id_email"
+            >Email Address <span>*</span></label
+          >
+          {{ form.email }} {% if form.email.errors %}
+          <div class="error-message">
+            <span>!</span> {{ form.email.errors.0 }}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="id_message"
+            >Message <span>*</span></label
+          >
+          {{ form.message }} {% if form.message.errors %}
+          <div class="error-message">
+            <span>!</span> {{ form.message.errors.0 }}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="checkbox-group">
+          {{ form.is_not_robot }}
+          <label class="checkbox-label" for="id_is_not_robot">
+            I'm not a robot. I confirm that I am a human submitting this form
+            and I agree to the
+            <a href="{% url 'privacy_policy' %}">Privacy Policy</a> and
+            <a href="{% url 'terms' %}">Terms and Conditions</a>.
+          </label>
+        </div>
+
+        {% if form.is_not_robot.errors %}
+        <div
+          class="error-message"
+          style="margin-top: -15px; margin-bottom: 20px"
+        >
+          <span>!</span> {{ form.is_not_robot.errors.0 }}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span id="btnText">SUBMIT</span>
+          <div class="loading" id="loadingSpinner" style="display: none"></div>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %} {% block extra_js %}
+<script>
+  // Form submission handling
+  document
+    .getElementById("contactForm")
+    .addEventListener("submit", function (e) {
+      const submitBtn = document.getElementById("submitBtn");
+      const btnText = document.getElementById("btnText");
+      const loadingSpinner = document.getElementById("loadingSpinner");
+
+      // Show loading state
+      submitBtn.disabled = true;
+      btnText.style.display = "none";
+      loadingSpinner.style.display = "inline-block";
+
+      // Simple validation
+      const isNotRobot = document.getElementById("id_is_not_robot");
+      if (!isNotRobot.checked) {
+        e.preventDefault();
+        alert("Please confirm that you are not a robot.");
+        submitBtn.disabled = false;
+        btnText.style.display = "inline";
+        loadingSpinner.style.display = "none";
+        return false;
+      }
+    });
+
+  // Add error classes to form fields with errors
+  document.addEventListener("DOMContentLoaded", function () {
+    const inputs = document.querySelectorAll(".form-input, .form-textarea");
+    inputs.forEach((input) => {
+      if (input.value.trim() === "") {
+        input.classList.add("error");
+      }
+
+      input.addEventListener("input", function () {
+        if (this.value.trim() !== "") {
+          this.classList.remove("error");
+        } else {
+          this.classList.add("error");
+        }
+      });
+    });
+  });
+
+  // Auto-resize textarea
+  const textarea = document.querySelector(".form-textarea");
+  if (textarea) {
+    textarea.addEventListener("input", function () {
+      this.style.height = "auto";
+      this.style.height = this.scrollHeight + "px";
+    });
+  }
+</script>
+{% endblock %}

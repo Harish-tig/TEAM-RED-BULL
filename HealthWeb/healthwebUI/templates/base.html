@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Medical Aids South Africa{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ================= GLOBAL ================= */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #fff;
+            color: #111;
+        }
+
+        /* ================= RESPONSIVE DESIGN ================= */
+        @media (max-width: 1024px) {
+            .hero-wrap {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .highlight-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .faq-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 20px;
+                padding: 13px 5%; /* Reduced by 5px */
+            }
+
+            .nav-left, .nav-right {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-left {
+                gap: 20px;
+            }
+
+            .nav-right {
+                gap: 15px;
+            }
+
+            .hero-text h1 {
+                font-size: 36px;
+            }
+
+            .highlight-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .switch-save-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .why h2,
+            .highlights h2,
+            .news h2 {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav a {
+                margin: 0 5px;
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+
+            .community-link, .login-link, .signup-link {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+
+            .logo-img {
+                height: 45px;
+            }
+
+            #chatbot-window {
+                width: calc(100% - 40px);
+                right: 20px;
+                bottom: 90px;
+                height: 450px;
+            }
+
+            #chatbot-icon {
+                bottom: 20px;
+                right: 20px;
+                width: 56px;
+                height: 56px;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- NAVBAR INCLUDED FROM SEPARATE FILE -->
+    {% include 'navbar.html' %}
+
+    <!-- MAIN CONTENT -->
+    {% block content %}{% endblock %}
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-top">
+            <p>
+                All content provided on this site is for information purposes only and
+                in no way constitutes legal or financial advice.
+            </p>
+            <span>© 2025 All rights reserved</span>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/articles/">Articles</a>
+            <a href="/community/">Community</a>
+            <a href="/privacy-policy/">Privacy Policy</a>
+            <a href="/terms-and-conditions/">Terms and Conditions</a>
+            <a href="/contact/">Contact Us</a>
+            <a href="/sitemap/">Sitemap</a>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,61 +1,125 @@
 {% extends 'community_app/base.html' %}
-
+{% load static %}
 
 {% block title %}Ask Question - HealthConnect{% endblock %}
 
-{% block content %}
-<div class="max-w-3xl mx-auto">
-    <div class="card">
-        <h1 class="text-2xl font-bold mb-6">Ask a Health Question</h1>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
 
-        <form method="POST">
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">Ask a Health Question</h1>
+        </div>
+
+        <form method="POST" class="auth-form" data-validate>
             {% csrf_token %}
 
-            <div class="form-group mb-4">
-                <label for="{{ form.title.id_for_label }}">Question Title *</label>
-                <input type="text" name="title" id="{{ form.title.id_for_label }}"
-                       class="form-control" placeholder="Be specific about your health concern"
-                       maxlength="200" required>
-                <p class="text-sm text-muted mt-1">What health issue are you facing?</p>
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}" class="form-label required">Question Title</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="form-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ form.title.errors.0 }}
+                    </div>
+                {% endif %}
+                <p class="form-help">Be specific about your health concern</p>
             </div>
 
-            <div class="form-group mb-4">
-                <label for="{{ form.description.id_for_label }}">Detailed Description *</label>
-                <textarea name="description" id="{{ form.description.id_for_label }}"
-                          class="form-control" rows="6"
-                          placeholder="Include details like: symptoms, duration, what you've tried, doctor visits..."
-                          required></textarea>
-                <p class="text-sm text-muted mt-1">The more details you provide, the better advice you'll get.</p>
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}" class="form-label required">Detailed Description</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="form-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ form.description.errors.0 }}
+                    </div>
+                {% endif %}
+                <p class="form-help">Include details like: symptoms, duration, what you've tried, doctor visits...</p>
             </div>
 
-            <div class="form-group mb-6">
-                <label for="{{ form.category.id_for_label }}">Category</label>
-                <select name="category" id="{{ form.category.id_for_label }}" class="form-control">
-                    <option value="">Select a category (optional)</option>
-                    {% for category in categories %}
-                        <option value="{{ category.id }}">{{ category.name }}</option>
-                    {% endfor %}
-                </select>
+            <div class="form-group">
+                <label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
+                {{ form.category }}
+                {% if form.category.errors %}
+                    <div class="form-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ form.category.errors.0 }}
+                    </div>
+                {% endif %}
+                <p class="form-help">Select a category to help others find your question</p>
             </div>
 
-            <div class="flex gap-3">
+            <div class="form-actions">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-paper-plane"></i> Post Question
                 </button>
-                <a href="{% url 'home' %}" class="btn">Cancel</a>
+                <a href="{% url 'home' %}" class="btn btn-outline">Cancel</a>
             </div>
         </form>
     </div>
 
-    <div class="card mt-6">
+    <div class="card mt-4">
         <h3 class="mb-3">Tips for getting better answers:</h3>
-        <ul class="space-y-2 text-muted">
-            <li><i class="fas fa-check text-secondary"></i> Mention symptoms and their duration</li>
-            <li><i class="fas fa-check text-secondary"></i> Share tests you've taken and results</li>
-            <li><i class="fas fa-check text-secondary"></i> Mention doctors you've consulted</li>
-            <li><i class="fas fa-check text-secondary"></i> Be clear about what help you need</li>
-            <li><i class="fas fa-check text-secondary"></i> Remember: This is community advice, not medical diagnosis</li>
+        <ul class="tips-list">
+            <li class="tip-item">
+                <i class="fas fa-check tip-icon"></i>
+                <span>Mention symptoms and their duration</span>
+            </li>
+            <li class="tip-item">
+                <i class="fas fa-check tip-icon"></i>
+                <span>Share tests you've taken and results</span>
+            </li>
+            <li class="tip-item">
+                <i class="fas fa-check tip-icon"></i>
+                <span>Mention doctors you've consulted</span>
+            </li>
+            <li class="tip-item">
+                <i class="fas fa-check tip-icon"></i>
+                <span>Be clear about what help you need</span>
+            </li>
+            <li class="tip-item">
+                <i class="fas fa-check tip-icon"></i>
+                <span>Remember: This is community advice, not medical diagnosis</span>
+            </li>
         </ul>
     </div>
 </div>
+
+<style>
+.tips-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tip-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tip-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.tip-icon {
+    color: var(--secondary-color);
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+.tip-item span {
+    color: var(--text-light);
+    line-height: 1.5;
+}
+</style>
 {% endblock %}

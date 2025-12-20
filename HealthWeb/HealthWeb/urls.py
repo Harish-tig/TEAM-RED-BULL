@@ -21,7 +21,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('community_app.urls')),
+    path('community/', include('community_app.urls')),
+    path("fundraise/",include("fundraise.urls")),
+    path('',include("healthwebUI.urls"))
 ]
 
 if settings.DEBUG:

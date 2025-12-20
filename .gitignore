@@ -13,7 +13,6 @@ venv/
 env/
 .venv/
 ENV/
-
 ############################
 # Environment Variables / Secrets
 ############################
