@@ -156,7 +156,7 @@
                 <h3 class="sidebar-title">Categories</h3>
                 <div class="categories-grid">
                     {% for category in categories %}
-                        <a href="{% url 'home' %}?search={{ category.name }}"
+                        <a href="{% url 'community_home' %}?search={{ category.name }}"
                            class="badge badge-secondary"
                            title="{{ category.description|default:'' }}">
                             <i class="fas fa-{{ category.icon|default:'question-circle' }}"></i>
