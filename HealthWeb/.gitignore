@@ -11,7 +11,7 @@ __pycache__/
 ############################
 venv/
 env/
-.venv/
+../.venv/
 ENV/
 ############################
 # Environment Variables / Secrets
